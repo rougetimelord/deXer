@@ -37,7 +37,7 @@ const logoRepl = async () => {
     ];
 }
 
-export default main = async () => {
+export const main = async () => {
     //Watch the head for changes
     helpers.mutation.watchElement(
         document.head, titleRepl
