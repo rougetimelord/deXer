@@ -4,9 +4,11 @@
  * @param {string} selectorList Selectors to look for
  * @param {Function} callback 
  * @param {HTMLElement=document.body} target
+ * @param {boolean=true} once Whether to run once
+ * @param {boolean=false} useMutations
  */
 export const waitForElement = async (
-    selectorList, callback, target=document.body
+    selectorList, callback, target=document.body, once=true
 ) => {
     let observer = new MutationObserver(
         async (mutations, observer) => {
@@ -14,13 +16,16 @@ export const waitForElement = async (
                 document.body.querySelectorAll(selectorList).length == selectorList.split(/,\s*/).length
             ) {
                 callback();
-                observer.disconnect();
+                if(once){
+                    observer.disconnect();
+                }
             }
         }
     );
     observer.observe(target,{
         subtree: true,
-        childList: true
+        childList: true,
+
     });
 }
 
