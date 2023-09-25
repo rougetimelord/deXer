@@ -1,4 +1,4 @@
-import * as helpers from './helpers'
+import * as helpers from '/scripts/helpers/index.js'
 
 let theme, iconPath;
 

@@ -1,6 +1,6 @@
 (async () => {
     const inject = await import(
         (!!chrome ? chrome : browser).runtime
-        .getURL("./helpers/index.js"));
+        .getURL("/scripts/inject.js"));
     inject.main();
 })();
