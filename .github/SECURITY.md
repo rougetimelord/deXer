@@ -1,0 +1,2 @@
+# Security Policy
+If you find a security issue in the extension, **do not** open a GitHub issue. Instead contact [rougetimelord@users.noreply.github.com](mailto:rougetimelord@users.noreply.github.com).
