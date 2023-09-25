@@ -38,6 +38,7 @@ const logoRepl = async () => {
 }
 
 export const main = async () => {
+    helpers.clipboard.intercept();
     document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
     //Get theme and run initial replacements
     helpers.runtime.themeGetter({
