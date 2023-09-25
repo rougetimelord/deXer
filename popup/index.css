@@ -29,12 +29,46 @@ html, body {
 }
 
 .opt.sel {
-    background: var(--sel-bg);
+    background-color: var(--sel-bg);
     box-shadow: 2px 2px 5px #000;
 }
 
+#opt1{
+    background-image: url(/assets/logo1.png);
+}
+
+#opt1::after {
+    content: 'Blue';
+    position: relative;
+    top: calc(64px + 0.25rem);
+}
+
+#opt2{
+    background-image: url(/assets/logo2.png);
+}
+
+#opt2::after {
+    content: 'Black';
+    position: relative;
+    top: calc(64px + 0.25rem);
+}
+
+#opt3{
+    background-image: url(/assets/logo3.png);
+}
+
+#opt3::after {
+    content: 'White';
+    position: relative;
+    top: calc(64px + 0.25rem);
+}
+
 .opt {
+    background-repeat: no-repeat;
+    background-size: 64px;
+    background-position: 50% calc(50% - 1rem);
     color: var(--minor-text);
+    width: calc(64px + 1rem);
     transition:
         transform 0.3s ease-out, 
         background 0.15s ease-in,
@@ -45,7 +79,7 @@ html, body {
 
 .opt:hover {
     transform: scale(1.1);
-    background: var(--hover-bg);
+    background-color: var(--hover-bg);
     box-shadow: 2px 2px 5px var(--activity-shadow);
 }
 
@@ -55,12 +89,8 @@ html, body {
         background 0.05s ease-in,
         box-shadow 0.02s ease-out;
     transform: scale(1.13);
-    background: var(--active-bg);
+    background-color: var(--active-bg);
     box-shadow: 2px 2px 5px 3px var(--activity-shadow);
-}
-
-.color {
-    margin-top: 0.5rem;
 }
 
 img {
