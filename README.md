@@ -11,10 +11,10 @@ Load as unpacked, good luck have fun.
 - Replaces page logo
 - Replaces menu logos
 - Blue/black/white themes
+- Intercepts copied links and replace domain
 
 ### Features for later??? Maybe??
 - Footer copyright text removal
-- Intercept copied links and replace domain (most likely)
 - Replace "repost" in retweet drop down
 - Replace text in settings menu
 - Replace "posts" on profiles
