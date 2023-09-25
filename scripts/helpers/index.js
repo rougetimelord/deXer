@@ -13,5 +13,5 @@ export const logos = {
 };
 
 export * as runtime from "./runtime.js";
-export * as Clipboard from "./clipboard.js";
 export * as mutation from "./mutation.js";
+export {default as clipboard} from "./clipboard.js";
