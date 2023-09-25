@@ -18,6 +18,7 @@ Load as unpacked, good luck have fun.
 - Replace "repost" in retweet drop down
 - Replace text in settings menu
 - Replace "posts" on profiles
+- Log in/sign up page (least likely)
 - More shit???...
 
 ### Guidelines

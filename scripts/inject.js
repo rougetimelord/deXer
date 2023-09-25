@@ -37,8 +37,13 @@ const logoRepl = async () => {
     ];
 }
 
+/**
+ * Main function
+ */
 export const main = async () => {
+    //Add copy event listener
     helpers.clipboard.intercept();
+    //Replace placeholder logo
     document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
     //Get theme and run initial replacements
     helpers.runtime.themeGetter({
