@@ -25,7 +25,7 @@ export const storageListener = async (callback, key) => {
                 callback(changes[key].newValue);
             }
         }
-    )
+    );
 }
 
 /**
@@ -35,5 +35,5 @@ export const storageListener = async (callback, key) => {
  * @returns 
  */
 export const url = (path) => {
-    return browserRuntime.runtime.getURL(path)
+    return browserRuntime.runtime.getURL(path);
 }

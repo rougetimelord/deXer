@@ -6,17 +6,16 @@ let theme, iconPath;
  * Replaces the page title
  */
 const titleRepl = async () =>{
-    let title = document.title.replace(
+    document.title = document.title.replace(
         /(X$)|((?<=on )X(?=: "))/,
         "Twitter");
-    document.title = title
 }
 
 /**
  * Replaces the tab icon
  */
 const iconRepl = async () => {
-    document.head.removeChild(document.querySelector("link[rel~='icon']"))
+    document.head.removeChild(document.querySelector("link[rel~='icon']"));
     let fav = document.createElement("link");
     fav.rel = "icon";
     fav.href = helpers.runtime.url(`${iconPath}.png`);
@@ -51,9 +50,9 @@ export const main = async () => {
             "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
         );
         iconRepl();
-    }).then(() => {
+    }).finally(() => {
         console.info("First replacement done!");
-    });
+    }).catch(err => {console.error(`Error: ${err}`)});
 
     //Watch the head for changes
     helpers.mutation.watchElement(
@@ -68,8 +67,8 @@ export const main = async () => {
             Promise.all([
                 logoRepl(),
                 iconRepl()
-            ]).then(() => {
-                console.info(`Updated to theme: ${theme}`)
-            })
+            ]).finally(() => {
+                console.info(`Updated to theme: ${theme}`);
+            }).catch(err => {console.error(`Error in theme update: ${err}`)});
     }, "theme");
 }
