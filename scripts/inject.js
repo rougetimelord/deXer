@@ -18,7 +18,7 @@ const titleRepl = async () =>{
 const iconRepl = async () => {
     document.head.removeChild(document.querySelector("link[rel~='icon']"))
     let fav = document.createElement("link");
-    fav.rel = "favicon";
+    fav.rel = "icon";
     fav.href = helpers.runtime.url(`${iconPath}.png`);
     document.head.appendChild(fav);
 }
@@ -38,29 +38,25 @@ const logoRepl = async () => {
 }
 
 export const main = async () => {
+    document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
     //Get theme and run initial replacements
-    await helpers.runtime.themeGetter({
-        theme: 1
-    }).then(themeRes =>{
-        theme = themeRes,
+    helpers.runtime.themeGetter({
+        "theme": 1
+    }).then(res => {
+        theme = res.theme;
         iconPath = `/assets/logo${theme}`;
-    }).then(async () => {
-        Promise.all([
-            titleRepl(),
-            iconRepl()
-        ]).then(() => {
-            console.info(`First replacement done!`)
-        })
+    }).then(() =>{//Wait for logo SVG elements to exist
+        helpers.mutation.waitForElement(
+            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
+        );
+        iconRepl();
+    }).then(() => {
+        console.info("First replacement done!");
     });
 
     //Watch the head for changes
     helpers.mutation.watchElement(
         document.head, titleRepl
-    );
-
-    //Wait for logo SVG elements to exist
-    helpers.mutation.waitForElement(
-        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
     );
 
     //Watch for theme changes, and rerun replacements
@@ -74,5 +70,5 @@ export const main = async () => {
             ]).then(() => {
                 console.info(`Updated to theme: ${theme}`)
             })
-    });
+    }, "theme");
 }

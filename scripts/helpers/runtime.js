@@ -8,9 +8,8 @@ const browserRuntime = !!chrome ? chrome : browser;
  * @returns Theme number
  */
 export const themeGetter = async (obj) => {
-    browserRuntime.storage.sync.get(obj).then(res => {
-        return res.theme;
-    }).catch(err => console.error(`Error: ${err}`))
+    let res = await browserRuntime.storage.sync.get(obj);
+    return res;
 }
 
 /**
@@ -23,7 +22,7 @@ export const storageListener = async (callback, key) => {
     browserRuntime.storage.onChanged.addListener(
         async (changes, area) => {
             if(Object.keys(changes).includes(key)){
-                callback(changes[key]);
+                callback(changes[key].newValue);
             }
         }
     )
