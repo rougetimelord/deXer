@@ -40,7 +40,7 @@ const logoRepl = async () => {
 /**
  * Intercepts the dropdown menu
  */
-const interceptRepostMenu = async () => {
+const interceptRetweetMenu = async () => {
     const retweet = document.querySelector("div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span");
     if(!retweet.classList.contains("dxd")){
         retweet.innerText = retweet.innerText.replace("post", "tweet");
@@ -52,10 +52,10 @@ const interceptRepostMenu = async () => {
  * Starts the process of hooking repost menus
  * 
  */
-const repostMenuStart = async () => {
+const retweetMenuStart = async () => {
     helpers.mutation.waitForElement("#layers", () => {
         helpers.mutation.waitForElement(
-            "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span", interceptRepostMenu, document.getElementById("layers"), false
+            "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span", interceptRetweetMenu, document.getElementById("layers"), false
         )
     });
 }
@@ -83,7 +83,7 @@ export const main = async () => {
         console.info("First replacement done!");
     }).catch(err => {console.error(`Error: ${err}`)});
     //Go hunt repost menus
-    repostMenuStart();
+    retweetMenuStart();
     //Watch the head for changes
     helpers.mutation.watchElement(
         document.head, titleRepl
