@@ -19,7 +19,7 @@ const iconRepl = async () => {
     document.head.removeChild(document.querySelector("link[rel~='icon']"))
     let fav = document.createElement("link");
     fav.rel = "favicon";
-    fav.href = browserRuntime.runtime.getURL(`${iconPath}.png`);
+    fav.href = helpers.runtime.url(`${iconPath}.png`);
     document.head.appendChild(fav);
 }
 
