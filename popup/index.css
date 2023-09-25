@@ -69,6 +69,7 @@ html, body {
     background-position: 50% calc(50% - 1rem);
     color: var(--minor-text);
     width: calc(64px + 1rem);
+    height: calc(64px + 1.5rem);
     transition:
         transform 0.3s ease-out, 
         background 0.15s ease-in,
