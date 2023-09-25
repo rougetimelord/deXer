@@ -38,18 +38,8 @@ const logoRepl = async () => {
 }
 
 export const main = async () => {
-    //Watch the head for changes
-    helpers.mutation.watchElement(
-        document.head, titleRepl
-    );
-
-    //Wait for logo SVG elements to exist
-    helpers.mutation.waitForElement(
-        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
-    );
-
     //Get theme and run initial replacements
-    helpers.runtime.themeGetter({
+    await helpers.runtime.themeGetter({
         theme: 1
     }).then(themeRes =>{
         theme = themeRes,
@@ -62,6 +52,16 @@ export const main = async () => {
             console.info(`First replacement done!`)
         })
     });
+
+    //Watch the head for changes
+    helpers.mutation.watchElement(
+        document.head, titleRepl
+    );
+
+    //Wait for logo SVG elements to exist
+    helpers.mutation.waitForElement(
+        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
+    );
 
     //Watch for theme changes, and rerun replacements
     helpers.runtime.storageListener(
