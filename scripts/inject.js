@@ -45,9 +45,7 @@ export const main = async () => {
 
     //Wait for logo SVG elements to exist
     helpers.mutation.waitForElement(
-        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg",
-        logoRepl,
-        document.querySelector("nav[role='navigation']")
+        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
     );
 
     //Get theme and run initial replacements

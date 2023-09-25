@@ -6,7 +6,7 @@
  * @param {HTMLElement=document.body} target
  */
 export const waitForElement = async (
-    selectorList, callback, target = document.body
+    selectorList, callback, target=document.body
 ) => {
     let observer = new MutationObserver(
         async (mutations, observer) => {
