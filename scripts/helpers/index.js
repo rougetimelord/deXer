@@ -12,6 +12,6 @@ export const logos = {
    </g>`
 };
 
-export * from "./runtime.js";
+export * as runtime from "./runtime.js";
 
-export * from "./mutation.js";
+export * as mutation from "./mutation.js";
