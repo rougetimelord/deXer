@@ -11,11 +11,11 @@ Load as unpacked, good luck have fun.
 - Replaces page logo
 - Replaces menu logos
 - Blue/black/white themes
-- Intercepts copied links and replace domain
+- Intercepts copied links and replaces domain
+- Replaces "repost" in retweet drop down
 
 ### Features for later??? Maybe??
 - Footer copyright text removal
-- Replace "repost" in retweet drop down
 - Replace text in settings menu
 - Replace "posts" on profiles
 - Log in/sign up page (least likely)
