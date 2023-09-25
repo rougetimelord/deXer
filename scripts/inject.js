@@ -20,6 +20,7 @@ const iconRepl = async () => {
     let fav = document.createElement("link");
     fav.rel = "icon";
     fav.href = helpers.runtime.url(`${iconPath}.png`);
+    fav.type = "image/png";
     document.head.appendChild(fav);
 }
 
