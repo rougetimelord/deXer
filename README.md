@@ -19,3 +19,8 @@ Load as unpacked, good luck have fun.
 - Replace text in settings menu
 - Replace "posts" on profiles
 - More shit???...
+
+### Guidelines
+- [Community Code of Conduct](.github/CODE_OF_CONDUCT.md)
+- [Contribution Guidelines](.github/CONTRIBUTING.md)
+- [Security Policy](.github/SECURITY.md)
