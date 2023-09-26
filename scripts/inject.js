@@ -70,6 +70,7 @@ const retweetMenuStart = async () => {
     helpers.mutation.waitForElement("#layers", async e => {
         helpers.mutation.waitForElement(
             "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
+            interceptRetweetMenu, e[0], false
         )
     });
 }
@@ -80,11 +81,20 @@ const retweetMenuStart = async () => {
  * @param {PopStateEvent | PushStateEvent} event 
  */
 const locationChange = async event => {
-    const links = [/\/home/, /\/explore/, /\/notifications/, /\/compose\/tweet/, /\/messages/, /\/lists/, /\/*\/communities/, /\/i\//, /\/settings\/*/];
+    const state = (event.state) ? event.state.state : event.detail.state;
+    if(state.state.previousPath == "/i/communitynotes"){
+        helpers.mutation.waitForElement(
+            "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
+        ); return;
+    }  
     const location = window.location.pathname;
-    if(event.state.state.previousPath == "/i/communitynotes"){
-        return logoRepl();
-    }
+    const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
+    if(location.match(links)){return}
+    helpers.mutation.waitForElement(
+        `a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`, e => {
+            e[0].innerText = "Tweets";
+        }
+    );
 }
 
 /**
@@ -93,8 +103,8 @@ const locationChange = async event => {
 export const main = async () => {
     //Add copy event listener
     helpers.clipboard();
-    //Replace placeholder logo
-    document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
+    // //Replace placeholder logo
+    // document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
     //Get theme and run initial replacements
     helpers.runtime.themeGetter({
         "theme": 1
