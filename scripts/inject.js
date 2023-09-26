@@ -82,7 +82,7 @@ let profileWatcher;
  * @param {PopStateEvent | PushStateEvent} event 
  */
 const locationChange = async event => {
-    const state = (event != undefined) ? (event.state) ? event.state.state : event.detail.state : undefined;
+    const state = (event != undefined) ? (event.state.state) ? event.state.state : event.detail.state : undefined;
     if(!!state && state.state.previousPath == "/i/communitynotes"){
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
