@@ -75,7 +75,6 @@ const retweetMenuStart = async () => {
     });
 }
 
-/** @type {MutationObserver | undefined} */
 let profileWatcher;
 /**
  * Event handler for events that change the location
