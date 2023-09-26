@@ -51,9 +51,11 @@ const logoRepl = async () => {
 
 /**
  * Intercepts the dropdown menu
+ * 
+ * @param {NodeListOf<Element>} e
  */
-const interceptRetweetMenu = async () => {
-    const retweet = document.querySelector("div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span");
+const interceptRetweetMenu = async e => {
+    const retweet = e[0];
     if(!retweet.classList.contains("dxd")){
         retweet.innerText = retweet.innerText.replace("post", "tweet");
         retweet.classList.add("dxd")
@@ -65,9 +67,9 @@ const interceptRetweetMenu = async () => {
  * 
  */
 const retweetMenuStart = async () => {
-    helpers.mutation.waitForElement("#layers", () => {
+    helpers.mutation.waitForElement("#layers", async e => {
         helpers.mutation.waitForElement(
-            "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span", interceptRetweetMenu, document.getElementById("layers"), false
+            "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
         )
     });
 }
