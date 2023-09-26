@@ -114,7 +114,9 @@ export const main = async () => {
     //Add copy event listener
     helpers.clipboard();
     // //Replace placeholder logo
-    // document.querySelector("#placeholder>svg").innerHTML = helpers.logos["2"];
+    helpers.mutation.waitForElement("#placeholder>svg", es=>{
+        es[0].innerHTML = helpers.logos[2];
+    })
     //Get theme and run initial replacements
     helpers.runtime.themeGetter({
         "theme": 1
