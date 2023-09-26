@@ -1,3 +1,10 @@
+import { url } from "./runtime.js";
+
+const script = document.createElement("script");
+script.src = url("scripts/helpers/historyOverwrite.js");
+script.id = "dex";
+document.head.insertBefore(script, document.head.firstChild);
+
 export const logos = {
     "1": `<style type="text/css">.st0{fill:#1D9BF0;}</style>
     <g id="Logo_1_" transform="matrix(.097502 0 0 .097502 -.097501 2.1032)">
