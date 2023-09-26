@@ -40,9 +40,10 @@ export const waitForElement = async (
  * Creates and connects an observer for the target with input callback
  * 
  * @param {HTMLElement} target 
- * @param {Function} callback 
+ * @param {MutationCallback} callback 
  */
 export const watchElement = async (target, callback) =>{
     let observer = new MutationObserver(callback);
     observer.observe(target, {childList: true});
+    return observer;
 }

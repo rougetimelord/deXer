@@ -75,6 +75,8 @@ const retweetMenuStart = async () => {
     });
 }
 
+/** @type {MutationObserver | undefined} */
+let profileWatcher;
 /**
  * Event handler for events that change the location
  * 
@@ -89,12 +91,24 @@ const locationChange = async event => {
     }  
     const location = window.location.pathname;
     const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
-    if(location.match(links)){return}
-    helpers.mutation.waitForElement(
-        `a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`, e => {
-            e[0].innerText = "Tweets";
+    if(location.match(links)){
+        if(profileWatcher != undefined){
+            profileWatcher.disconnect();
         }
-    );
+        return}
+    helpers.mutation.waitForElement(
+        `a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`, async e => {
+            e[0].innerText = "Tweets";
+        }).then(() => {
+            const el = document.querySelector("div[data-testid='ScrollSnap-List']");
+            if(!!profileWatcher){
+                profileWatcher.observe(el,{childList: true})
+            }else{
+                profileWatcher = mutation.watchElement(el, () => {
+                    document.querySelector(`a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`).innerText="Tweets"
+                });
+            }
+        });
 }
 
 /**
