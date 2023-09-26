@@ -13,11 +13,11 @@ Load as unpacked, good luck have fun.
 - Blue/black/white themes
 - Intercepts copied links and replaces domain
 - Replaces "repost" in retweet drop down
+- Replaces "posts" on profiles
 
 ### Features for later??? Maybe??
 - Footer copyright text removal
 - Replace text in settings menu
-- Replace "posts" on profiles
 - Log in/sign up page (least likely)
 - More shit???...
 
