@@ -3,6 +3,7 @@
  * 
  * @callback waitForElementCallback
  * @param {NodeListOf<Element>} elements
+ * @param {MutationObserver} observer
  */
 /**
  * Creates a mutation listener that waits for all elements in the selector list to exist, callsback and dies
@@ -22,7 +23,7 @@ export const waitForElement = async (
             if(
                 elements.length >= selectorList.split(/,\s*/).length
             ) {
-                callback(elements);
+                callback(elements, observer);
                 if(once){
                     observer.disconnect();
                 }
@@ -32,7 +33,6 @@ export const waitForElement = async (
     observer.observe(target,{
         subtree: true,
         childList: true,
-
     });
 }
 
@@ -40,7 +40,7 @@ export const waitForElement = async (
  * Creates and connects an observer for the target with input callback
  * 
  * @param {HTMLElement} target 
- * @param {MutationCallback} callback 
+ * @param {MutationCallback} callback
  */
 export const watchElement = async (target, callback) =>{
     let observer = new MutationObserver(callback);

@@ -83,8 +83,8 @@ let profileWatcher;
  * @param {PopStateEvent | PushStateEvent} event 
  */
 const locationChange = async event => {
-    const state = (event.state) ? event.state.state : event.detail.state;
-    if(state.state.previousPath == "/i/communitynotes"){
+    const state = (event != undefined) ? (event.state) ? event.state.state : event.detail.state : undefined;
+    if(!!state && state.state.previousPath == "/i/communitynotes"){
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
         ); return;
@@ -92,23 +92,20 @@ const locationChange = async event => {
     const location = window.location.pathname;
     const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
     if(location.match(links)){
-        if(profileWatcher != undefined){
+        if(!!profileWatcher){
             profileWatcher.disconnect();
+            profileWatcher = undefined;
         }
-        return}
+        return;
+    }
     helpers.mutation.waitForElement(
-        `a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`, async e => {
-            e[0].innerText = "Tweets";
-        }).then(() => {
-            const el = document.querySelector("div[data-testid='ScrollSnap-List']");
-            if(!!profileWatcher){
-                profileWatcher.observe(el,{childList: true})
-            }else{
-                profileWatcher = mutation.watchElement(el, () => {
-                    document.querySelector(`a[href='/${window.location.pathname.split("/")[1]}']>div>div>span`).innerText="Tweets"
-                });
+        `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
+            profileWatcher = obs;
+            if(!es[0].classList.contains("dxd")){
+                es[0].innerText = "Tweets";
+                es[0].classList.add("dxd")
             }
-        });
+        }, document.getElementsByTagName("main")[0], false);
 }
 
 /**
