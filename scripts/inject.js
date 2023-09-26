@@ -1,6 +1,18 @@
 import * as helpers from '/scripts/helpers/index.js'
 
-let theme, iconPath;
+let theme;
+
+//Watch for theme changes, and rerun replacements
+helpers.runtime.storageListener(
+    async themeChange => {
+        theme = themeChange;
+        Promise.all([
+            logoRepl(),
+            iconRepl()
+        ]).finally(() => {
+            console.info(`Updated to theme: ${theme}`);
+        }).catch(err => {console.error(`Error in theme update: ${err}`)});
+}, "theme");
 
 /**
  * Replaces the page title
@@ -18,7 +30,7 @@ const iconRepl = async () => {
     document.head.removeChild(document.querySelector("link[rel~='icon']"));
     let fav = document.createElement("link");
     fav.rel = "icon";
-    fav.href = helpers.runtime.url(`${iconPath}.png`);
+    fav.href = helpers.runtime.url(`/assets/logo${theme}.png`);
     fav.type = "image/png";
     document.head.appendChild(fav);
 }
@@ -61,6 +73,19 @@ const retweetMenuStart = async () => {
 }
 
 /**
+ * Event handler for events that change the location
+ * 
+ * @param {PopStateEvent | PushStateEvent} event 
+ */
+const locationChange = async event => {
+    const links = [/\/home/, /\/explore/, /\/notifications/, /\/compose\/tweet/, /\/messages/, /\/lists/, /\/*\/communities/, /\/i\//, /\/settings\/*/];
+    const location = window.location.pathname;
+    if(event.state.state.previousPath == "/i/communitynotes"){
+        return logoRepl();
+    }
+}
+
+/**
  * Main function
  */
 export const main = async () => {
@@ -73,7 +98,6 @@ export const main = async () => {
         "theme": 1
     }).then(res => {
         theme = res.theme;
-        iconPath = `/assets/logo${theme}`;
     }).then(() =>{//Wait for logo SVG elements to exist
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
@@ -88,16 +112,7 @@ export const main = async () => {
     helpers.mutation.watchElement(
         document.head, titleRepl
     );
-    //Watch for theme changes, and rerun replacements
-    helpers.runtime.storageListener(
-        async themeChange => {
-            theme = themeChange,
-            iconPath = `/assets/logo${theme}`;
-            Promise.all([
-                logoRepl(),
-                iconRepl()
-            ]).finally(() => {
-                console.info(`Updated to theme: ${theme}`);
-            }).catch(err => {console.error(`Error in theme update: ${err}`)});
-    }, "theme");
+    //Add location change listeners
+    window.addEventListener("pushstate", locationChange, {passive: true});
+    window.addEventListener("popstate", locationChange, {passive: true});
 }
