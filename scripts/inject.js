@@ -18,9 +18,10 @@ helpers.runtime.storageListener(
  * Replaces the page title
  */
 const titleRepl = async () =>{
-    document.title = document.title.replace(
-        /(X$)|((?<=on )X(?=: "))/,
-        "Twitter");
+    if(document.querySelector("title").innerText.match(/X$/)){
+        document.title = document.title.replace(
+        /X$/,"Twitter");
+    }
 }
 
 /**
@@ -132,10 +133,13 @@ export const main = async () => {
     }).catch(err => {console.error(`Error: ${err}`)});
     //Go hunt repost menus
     retweetMenuStart();
-    //Watch the head for changes
+    //Add title element and watch it
+    let e = document.createElement("title");
+    e.innerText = "Twitter";
+    document.head.append(e)
     helpers.mutation.watchElement(
-        document.head, titleRepl
-    );
+        e, titleRepl
+    )
     //Add location change listeners
     window.addEventListener("pushstate", locationChange, {passive: true});
     window.addEventListener("popstate", locationChange, {passive: true});
