@@ -21,8 +21,7 @@ export const waitForElement = async (selectorList, callback, target=document.bod
             callback(es0, null);
             return;}
     } catch (err) {
-        console.error(`Dexer error in WFE: ${selectorList} ${target} ${err}`);
-        return;
+        console.error(`[Dexer] error in WFE pre-check: ${selectorList} ${target} ${err}`);
     }
     let observer = new MutationObserver(
         async (mutations, observer) => {
@@ -33,8 +32,12 @@ export const waitForElement = async (selectorList, callback, target=document.bod
             }
         }
     );
-    observer.observe(target, {subtree: true, childList: true});
-    return observer;
+    try{
+        observer.observe(target, {subtree: true, childList: true});
+        return observer;
+    } catch (err) {
+        console.error(`[Dexer] error in WFE: ${target} ${err}`)
+    }
 }
 
 /**
@@ -49,7 +52,7 @@ export const watchElement = async (target, callback) =>{
         observer.observe(target, {childList: true});
         return observer;
     } catch (err) {
-        console.error(`Dexer error in WE: ${target} ${err}`)
+        console.error(`[Dexer] error in WE: ${target} ${err}`)
         return;
     }
 }

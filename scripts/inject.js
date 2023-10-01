@@ -10,8 +10,8 @@ helpers.runtime.storageListener(
             logoRepl(),
             iconRepl()
         ]).finally(() => {
-            console.debug(`Updated to theme: ${theme}`);
-        }).catch(err => {console.error(`Dexer error in theme update: ${err}`)});
+            console.debug(`[Dexer] updated to theme: ${theme}`);
+        }).catch(err => {console.error(`[Dexer] error in theme update: ${err}`)});
 }, "theme");
 
 /**
@@ -21,7 +21,7 @@ const titleRepl = async () =>{
     if(document.querySelector("title").innerText.match(/X$/)){
         document.title = document.title.replace(
         /X$/,"Twitter");
-        console.debug("Changed title")
+        console.debug("[Dexer] changed title")
     }
 }
 
@@ -35,7 +35,7 @@ const iconRepl = async () => {
     fav.href = helpers.runtime.url(`/assets/logo${theme}.png`);
     fav.type = "image/png";
     document.head.appendChild(fav);
-    console.debug("Icon replaced");
+    console.debug("[Dexer] icon replaced");
 }
 
 /**
@@ -48,7 +48,7 @@ const logoRepl = async () => {
         "a[href~='/i/verified-choose']>div>div>svg");
     mainLogo.innerHTML = helpers.logos[theme];
     accentLogo.innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
-    console.debug("Logos replaced")
+    console.debug("[Dexer] logos replaced")
 }
 
 /**
@@ -60,7 +60,7 @@ const interceptRetweetMenu = async es => {
     if(!es[0].classList.contains("dxd")){
         es[0].innerText = es[0].innerText.replace("post", "tweet");
         es[0].classList.add("dxd");
-        console.debug("Retweet popup replaced")
+        console.debug("[Dexer] retweet popup replaced")
     }
 }
 
@@ -89,7 +89,7 @@ const locationChange = async event => {
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
         );
-        console.debug("Left community notes, logo replaced")
+        console.debug("[Dexer] left community notes, logo replaced")
         return;
     }
 
@@ -109,7 +109,7 @@ const locationChange = async event => {
             if(!es[0].classList.contains("dxd")){
                 es[0].innerText = "Tweets";
                 es[0].classList.add("dxd");
-                console.debug("Replaced posts text on profile")
+                console.debug("[Dexer] replaced posts text on profile")
             }
         }, document.getElementsByTagName("main")[0], false);
 }
@@ -139,8 +139,8 @@ export const main = async () => {
         );
         iconRepl();
     }).finally(() => {
-        console.debug("First logo and icon replacement done!");
-    }).catch(err => {console.error(`Dexer error: ${err}`)});
+        console.debug("[Dexer] first logo and icon replacement done!");
+    }).catch(err => {console.error(`[Dexer] error: ${err}`)});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
