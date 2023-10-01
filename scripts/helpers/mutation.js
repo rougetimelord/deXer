@@ -6,7 +6,7 @@
  * @param {MutationObserver} observer
  */
 /**
- * Creates a mutation listener that waits for all elements in the selector list to exist, callsback and dies
+ * Creates a mutation listener that waits for all elements in the selector list to exist
  * 
  * @param {string} selectorList Selectors to look for
  * @param {waitForElementCallback} callback 

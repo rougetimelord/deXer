@@ -20,7 +20,7 @@ export const themeGetter = async (obj) => {
  */
 export const storageListener = async (callback, key) => {
     browserRuntime.storage.onChanged.addListener(
-        async (changes, area) => {
+        async (changes) => {
             if(Object.keys(changes).includes(key)){
                 callback(changes[key].newValue);
             }

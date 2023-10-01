@@ -44,21 +44,18 @@ const logoRepl = async () => {
     accentLogo = document.querySelector(
         "a[href~='/i/verified-choose']>div>div>svg");
     mainLogo.innerHTML = helpers.logos[theme];
-    accentLogo.innerHTML = helpers.logos[
-        (theme != 3) ? 2 : 3
-    ];
+    accentLogo.innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
 }
 
 /**
  * Intercepts the dropdown menu
  * 
- * @param {NodeListOf<Element>} e
+ * @param {NodeListOf<Element>} es
  */
-const interceptRetweetMenu = async e => {
-    const retweet = e[0];
-    if(!retweet.classList.contains("dxd")){
-        retweet.innerText = retweet.innerText.replace("post", "tweet");
-        retweet.classList.add("dxd")
+const interceptRetweetMenu = async es => {
+    if(!es[0].classList.contains("dxd")){
+        es[0].innerText = es[0].innerText.replace("post", "tweet");
+        es[0].classList.add("dxd");
     }
 }
 
@@ -87,7 +84,8 @@ const locationChange = async event => {
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
         ); return;
-    }  
+    }
+
     const location = window.location.pathname;
     const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
     if(location.match(links)){
@@ -97,12 +95,13 @@ const locationChange = async event => {
         }
         return;
     }
+
     helpers.mutation.waitForElement(
         `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
             profileWatcher = obs;
             if(!es[0].classList.contains("dxd")){
                 es[0].innerText = "Tweets";
-                es[0].classList.add("dxd")
+                es[0].classList.add("dxd");
             }
         }, document.getElementsByTagName("main")[0], false);
 }
@@ -114,15 +113,19 @@ export const main = async () => {
     //Add copy event listener
     helpers.clipboard();
     // //Replace placeholder logo
-    helpers.mutation.waitForElement("#placeholder>svg", es=>{
-        es[0].innerHTML = helpers.logos[2];
+    helpers.mutation.waitForElement("#placeholder>svg",
+        /**
+         * @param {NodeListOf<Element>} es 
+         */
+        es => {
+            es[0].innerHTML = helpers.logos[2];
     })
     //Get theme and run initial replacements
     helpers.runtime.themeGetter({
         "theme": 1
     }).then(res => {
         theme = res.theme;
-    }).then(() =>{//Wait for logo SVG elements to exist
+    }).then(() =>{
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
         );
@@ -130,7 +133,7 @@ export const main = async () => {
     }).finally(() => {
         console.info("First replacement done!");
     }).catch(err => {console.error(`Error: ${err}`)});
-    //Go hunt repost menus
+    //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Watch the head for changes
     helpers.mutation.watchElement(
