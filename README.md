@@ -2,7 +2,7 @@
 Removes the annoying X branding from Twitter
 
 ### Usability
-Works in Chrome 116. Should work in Firefox, or any browser that implements the WebExtensions API.
+Works in Chrome 116+. Should work in Firefox, or any browser that implements the WebExtensions API.
 
 Load as unpacked, good luck have fun.
 
