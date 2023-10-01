@@ -14,26 +14,22 @@
  * @param {boolean=true} once Whether to run once
  * @param {boolean=false} useMutations
  */
-export const waitForElement = async (
-    selectorList, callback, target=document.body, once=true
-) => {
+export const waitForElement = async (selectorList, callback, target=document.body, once=true) => {
+    let es0 = document.body.querySelectorAll(selectorList);
+    if(es0.length >= selectorList.split(/,\s*/).length){
+        callback(es0, null);
+        return;
+    }
     let observer = new MutationObserver(
         async (mutations, observer) => {
-            const elements =document.body.querySelectorAll(selectorList);
-            if(
-                elements.length >= selectorList.split(/,\s*/).length
-            ) {
+            const elements = document.body.querySelectorAll(selectorList);
+            if(elements.length >= selectorList.split(/,\s*/).length){
                 callback(elements, observer);
-                if(once){
-                    observer.disconnect();
-                }
+                if(once){observer.disconnect()}
             }
         }
     );
-    observer.observe(target,{
-        subtree: true,
-        childList: true,
-    });
+    observer.observe(target, {subtree: true, childList: true});
 }
 
 /**
