@@ -15,14 +15,18 @@
  * @param {boolean=false} useMutations
  */
 export const waitForElement = async (selectorList, callback, target=document.body, once=true) => {
-    let es0 = document.body.querySelectorAll(selectorList);
-    if(es0.length >= selectorList.split(/,\s*/).length){
-        callback(es0, null);
+    try{
+        const es0 = document.querySelectorAll(selectorList);
+        if(es0.length >= selectorList.split(/,\s*/).length){
+            callback(es0, null);
+            return;}
+    } catch (err) {
+        console.error(`Error: ${err}`);
         return;
     }
     let observer = new MutationObserver(
         async (mutations, observer) => {
-            const elements = document.body.querySelectorAll(selectorList);
+            const elements = document.querySelectorAll(selectorList);
             if(elements.length >= selectorList.split(/,\s*/).length){
                 callback(elements, observer);
                 if(once){observer.disconnect()}
@@ -30,6 +34,7 @@ export const waitForElement = async (selectorList, callback, target=document.bod
         }
     );
     observer.observe(target, {subtree: true, childList: true});
+    return observer;
 }
 
 /**
