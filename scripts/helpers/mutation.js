@@ -21,7 +21,7 @@ export const waitForElement = async (selectorList, callback, target=document.bod
             callback(es0, null);
             return;}
     } catch (err) {
-        console.error(`Error: ${err}`);
+        console.error(`Dexer error in WFE: ${selectorList} ${target} ${err}`);
         return;
     }
     let observer = new MutationObserver(
@@ -44,7 +44,12 @@ export const waitForElement = async (selectorList, callback, target=document.bod
  * @param {MutationCallback} callback
  */
 export const watchElement = async (target, callback) =>{
-    let observer = new MutationObserver(callback);
-    observer.observe(target, {childList: true});
-    return observer;
+    try{
+        let observer = new MutationObserver(callback);
+        observer.observe(target, {childList: true});
+        return observer;
+    } catch (err) {
+        console.error(`Dexer error in WE: ${target} ${err}`)
+        return;
+    }
 }
