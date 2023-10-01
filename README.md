@@ -25,3 +25,4 @@ Load as unpacked, good luck have fun.
 - [Community Code of Conduct](.github/CODE_OF_CONDUCT.md)
 - [Contribution Guidelines](.github/CONTRIBUTING.md)
 - [Security Policy](.github/SECURITY.md)
+- [License](LICENSE)
