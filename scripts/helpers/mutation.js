@@ -36,7 +36,7 @@ export const waitForElement = async (selectorList, callback, target=document.bod
         observer.observe(target, {subtree: true, childList: true});
         return observer;
     } catch (err) {
-        console.error(`[Dexer] error in WFE: ${target} ${err}`)
+        console.error(`[Dexer] error in WFE: ${selectorList} ${target} ${err}`)
     }
 }
 
