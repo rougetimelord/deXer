@@ -135,11 +135,11 @@ export const main = async () => {
         theme = res.theme;
     }).then(() =>{
         helpers.mutation.waitForElement(
-            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, document.getElementById("react-root")
+            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, (!!document.getElementById("react-root")) ? document.getElementById("react-root") : document
         );
         iconRepl();
     }).finally(() => {
-        console.debug("[Dexer] first logo and icon replacement done!");
+        console.debug("[Dexer] first logo and icon replacement executed");
     }).catch(err => {console.error(`[Dexer] error: err`, err)});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
