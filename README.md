@@ -16,6 +16,7 @@ Load as unpacked, good luck have fun.
 - Replaces "posts" on profiles
 
 ### Features for later??? Maybe??
+- Replace "posts" on notifications page
 - Footer copyright text removal
 - Replace text in settings menu
 - Log in/sign up page (least likely)
