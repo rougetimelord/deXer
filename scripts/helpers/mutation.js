@@ -14,7 +14,7 @@
  * @param {boolean=true} once Whether to run once
  * @param {boolean=false} useMutations
  */
-export const waitForElement = async (selectorList, callback, target=document.body, once=true) => {
+export const waitForElement = async (selectorList, callback, target=document, once=true) => {
     try{
         const es0 = document.querySelectorAll(selectorList);
         if(es0.length >= selectorList.split(/,\s*/).length){
