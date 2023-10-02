@@ -11,7 +11,7 @@ helpers.runtime.storageListener(
             iconRepl()
         ]).finally(() => {
             console.debug(`[Dexer] updated to theme: ${theme}`);
-        }).catch(err => {console.error(`[Dexer] error in theme update: ${err}`)});
+        }).catch(err => {console.error(`[Dexer] error in theme update:`, err)});
 }, "theme");
 
 /**
@@ -140,7 +140,7 @@ export const main = async () => {
         iconRepl();
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement done!");
-    }).catch(err => {console.error(`[Dexer] error: ${err}`)});
+    }).catch(err => {console.error(`[Dexer] error: err`, err)});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it

@@ -12,7 +12,6 @@
  * @param {waitForElementCallback} callback 
  * @param {HTMLElement=document.body} target
  * @param {boolean=true} once Whether to run once
- * @param {boolean=false} useMutations
  */
 export const waitForElement = async (selectorList, callback, target=document, once=true) => {
     try{
@@ -21,7 +20,7 @@ export const waitForElement = async (selectorList, callback, target=document, on
             callback(es0, null);
             return;}
     } catch (err) {
-        console.error(`[Dexer] error in WFE pre-check: ${selectorList} ${target} ${err}`);
+        console.error(`[Dexer] error in WFE pre-check:`, err, selectorList, target);
     }
     let observer = new MutationObserver(
         async (mutations, observer) => {
@@ -36,7 +35,7 @@ export const waitForElement = async (selectorList, callback, target=document, on
         observer.observe(target, {subtree: true, childList: true});
         return observer;
     } catch (err) {
-        console.error(`[Dexer] error in WFE: ${selectorList} ${target} ${err}`)
+        console.error(`[Dexer] error in WFE:`, err, selectorList, target)
     }
 }
 
@@ -52,7 +51,7 @@ export const watchElement = async (target, callback) =>{
         observer.observe(target, {childList: true});
         return observer;
     } catch (err) {
-        console.error(`[Dexer] error in WE: ${target} ${err}`)
+        console.error(`[Dexer] error in WE: ${err}`, target, callback.name)
         return;
     }
 }
