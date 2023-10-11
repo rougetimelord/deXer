@@ -19,11 +19,11 @@ export const themeGetter = async () => {
  * @param {StorageChangeCallback} callback Gets called with whatever changes.key is
  * @param {string} key
  */
-export const storageListener = async (callback, key) => {
+export const storageListener = async (callback) => {
     browserRuntime.storage.onChanged.addListener(
         async (changes) => {
-            if(Object.keys(changes).includes(key)){
-                callback(changes[key].newValue);
+            if(Object.keys(changes).includes("theme")){
+                callback(changes.theme.newValue);
             }
         }
     );

@@ -4,15 +4,15 @@ let theme;
 
 //Watch for theme changes, and rerun replacements
 helpers.runtime.storageListener(
-    async themeChange => {
-        theme = themeChange;
+    async newTheme => {
+        theme = newTheme;
         Promise.all([
             logoRepl(),
             iconRepl()
         ]).finally(() => {
             console.debug(`[Dexer] updated to theme: ${theme}`);
         }).catch(err => {console.error(`[Dexer] error in theme update:`, err)});
-}, "theme");
+});
 
 /**
  * Replaces the page title
