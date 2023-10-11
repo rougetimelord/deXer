@@ -45,7 +45,7 @@ const iconRepl = async () => {
  */
 const logoRepl = async () => {
     document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme]
-    document.querySelector("a[href~='/i/verified-choose']>div>div>svg") = helpers.logos[(theme != 3) ? 2 : 3];
+    document.querySelector("a[href~='/i/verified-choose']>div>div>svg").innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
     console.debug("[Dexer] logos replaced")
 }
 
