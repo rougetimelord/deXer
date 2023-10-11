@@ -101,7 +101,7 @@ const newNotifications = async (mutations, observer, target, options) => {
  */
 const notificationPage = async () => {
     helpers.mutation.waitForElement(
-        "section[aria-labelledby='accessible-list-1']>div",
+        "div[tabindex='0']>div>section>div",
         async es => {
             let timeline = es[0];
             //Replace first batch of notifications
