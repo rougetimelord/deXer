@@ -10,8 +10,8 @@
  * 
  * @param {string} selectorList Selectors to look for
  * @param {waitForElementCallback} callback 
- * @param {HTMLElement=document.body} target
- * @param {boolean=true} once Whether to run once
+ * @param {HTMLElement} [target=document.body]
+ * @param {boolean} [once=true] Whether to run once
  */
 export const waitForElement = async (selectorList, callback, target=document, once=true) => {
     try{
@@ -39,16 +39,28 @@ export const waitForElement = async (selectorList, callback, target=document, on
     }
 }
 
+
+/**
+ * Extended callback with parameters that allow observer reconnect
+ * 
+ * @callback extendedMutationCallBack
+ * @param {MutationRecord[]} mutations
+ * @param {MutationObserver} observer
+ * @param {HTMLElement} target The target supplied to the parent watch call
+ * @param {MutationObserverInit} options The options provided to the parent watch call
+ */
 /**
  * Creates and connects an observer for the target with input callback
  * 
  * @param {HTMLElement} target 
- * @param {MutationCallback} callback
+ * @param {MutationCallback | extendedMutationCallBack} callback
+ * @param {MutationObserverInit} [options={childList:true}]
+ *
  */
-export const watchElement = async (target, callback) =>{
+export const watchElement = async (target, callback, options={childList: true}) =>{
     try{
-        let observer = new MutationObserver(callback);
-        observer.observe(target, {childList: true});
+        let observer = new MutationObserver((mutations, observer)=>{callback(mutations, observer, target, options)});
+        observer.observe(target, options);
         return observer;
     } catch (err) {
         console.error(`[Dexer] error in WE: ${err}`, target, callback.name)
