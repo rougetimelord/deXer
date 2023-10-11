@@ -175,9 +175,7 @@ export const main = async () => {
             es[0].innerHTML = helpers.logos[2];
     })
     //Get theme and run initial replacements
-    helpers.runtime.themeGetter({
-        "theme": 1
-    }).then(res => {
+    helpers.runtime.themeGetter().then(res => {
         theme = res.theme;
     }).then(() =>{
         helpers.mutation.waitForElement(
