@@ -14,12 +14,14 @@ Load as unpacked, good luck have fun.
 - Intercepts copied links and replaces domain
 - Replaces "repost" in retweet drop down
 - Replaces "posts" on profiles
+- Replaces "posts" on notifications page
 
 ### Features for later??? Maybe??
-- Replace "posts" on notifications page
 - Footer copyright text removal
 - Replace text in settings menu
 - Log in/sign up page (least likely)
+- Add option to copy `fxtwitter` links
+-
 - More shit???...
 
 ### Guidelines
