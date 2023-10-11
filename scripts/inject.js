@@ -87,12 +87,11 @@ const newNotifications = async (mutations, observer, target, options) => {
     mutations.forEach(async mutation => {
         mutation.addedNodes.forEach(
             async node => {
-                //This catches notifications about likes
-                let txt = node.querySelector("div>span:last-of-type>span");
-                if(txt != null){
-                    txt.innerText = txt.innerText.replace("post", "tweet");
-                    return;
-                }
+                node.querySelectorAll("div>span>span").forEach(
+                    text => {
+                        text.innerHTML = text.innerHTML.replace("post", "tweet");
+                    }
+                )
             });
     })
     observer.observe(target, options);
@@ -106,6 +105,12 @@ const notificationPage = async () => {
         "div[aria-label~='Notifications']",
         async elems => {
             let timeline = elems[0];
+            //Replace first batch of notifications
+            timeline.querySelectorAll("div>span>span").forEach(
+                text => {
+                    text.innerHTML = text.innerHTML.replace("post", "tweet");
+                }
+            )
             helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
         }
     );
