@@ -1,18 +1,19 @@
 //Detect chrome
 let runtime = !!chrome ? chrome : browser;
-//Add event listener
-document.body.addEventListener("click", event => {
-    document.getElementsByClassName("sel").item(0).classList.remove("sel");
-    event.target.classList.add("sel");
-    runtime.storage.sync.set({
-        theme: event.target.id.replace("opt","")
-    });
-});
 //Load saved theme or default
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("desc").innerText = runtime.i18n.getMessage(themeDescription)
+    //Add event listener
+    document.getElementById("flex").addEventListener("click", event => {
+        try {document.getElementsByClassName("sel").item(0).classList.remove("sel")} catch{}
+        event.target.classList.add("sel");
+        runtime.storage.sync.set({
+            theme: event.target.id.replace("opt","")
+        });
+    });
+    document.getElementById("desc").innerText = runtime.i18n.getMessage("themeDescription");
     runtime.storage.sync.get({theme: 1}).then(res => {
-        document.getElementsByClassName("sel").item(0).classList.remove("sel");
+        console.log(res)
+        try{document.getElementsByClassName("sel").item(0).classList.remove("sel");}catch{}
         document.getElementById(`opt${res.theme}`).classList.add("sel");
     });
 })
