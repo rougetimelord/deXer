@@ -43,7 +43,7 @@ export const waitForElement = async (selectorList, callback, target=document, on
 /**
  * Extended callback with parameters that allow observer reconnect
  * 
- * @callback extendedMutationCallBack
+ * @callback ExtendedMutationCallBack
  * @param {MutationRecord[]} mutations
  * @param {MutationObserver} observer
  * @param {HTMLElement} target The target supplied to the parent watch call
@@ -53,7 +53,7 @@ export const waitForElement = async (selectorList, callback, target=document, on
  * Creates and connects an observer for the target with input callback
  * 
  * @param {HTMLElement} target 
- * @param {MutationCallback | extendedMutationCallBack} callback
+ * @param {MutationCallback | ExtendedMutationCallBack} callback
  * @param {MutationObserverInit} [options={childList:true}]
  *
  */

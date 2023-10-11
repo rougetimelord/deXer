@@ -16,11 +16,13 @@ helpers.runtime.storageListener(
 
 /**
  * Replaces the page title
+ * 
+ * @type {import('./helpers/mutation').ExtendedMutationCallBack}
+ * @param {HTMLElement} target
  */
-const titleRepl = async () =>{
-    if(document.querySelector("title").innerText.match(/X$/)){
-        document.title = document.title.replace(
-        /X$/,"Twitter");
+const titleRepl = async (...[,,target]) =>{
+    if(target.innerText.match(/X$/)){
+        target.replaceText(/X$/, "Twitter")
         console.debug("[Dexer] changed title")
     }
 }
@@ -54,11 +56,11 @@ const logoRepl = async () => {
 /**
  * Intercepts the dropdown menu
  * 
- * @param {NodeListOf<Element>} es
+ * @param {NodeListOf<HTMLElement>} es
  */
 const interceptRetweetMenu = async es => {
     if(!es[0].classList.contains("dxd")){
-        es[0].innerText = es[0].innerText.replace("post", "tweet");
+        es[0].replaceText("post", "tweet");
         es[0].classList.add("dxd");
         console.debug("[Dexer] retweet popup replaced")
     }
@@ -80,7 +82,7 @@ const retweetMenuStart = async () => {
 /**
  * Replaces the word "post" in notifications as they load in
  * 
- * @type {import('./helpers/mutation').extendedMutationCallBack}
+ * @type {import('./helpers/mutation').ExtendedMutationCallBack}
  */
 const newNotifications = async (mutations, observer, target, options) => {
     observer.disconnect()
@@ -88,13 +90,14 @@ const newNotifications = async (mutations, observer, target, options) => {
         mutation.addedNodes.forEach(
             async node => {
                 node.querySelectorAll("div>span>span").forEach(
-                    text => {
-                        text.innerHTML = text.innerHTML.replace("post", "tweet");
+                    async text => {
+                        text.replaceText("post", "tweet");
                     }
                 )
             });
-    })
+    });
     observer.observe(target, options);
+    console.debug("[Dexer] notification text(s) changed")
 }
 
 /**
@@ -108,7 +111,7 @@ const notificationPage = async () => {
             //Replace first batch of notifications
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
-                    text.innerHTML = text.innerHTML.replace("post", "tweet");
+                    text.replaceText("post", "tweet");
                 }
             )
             helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
@@ -120,7 +123,7 @@ let profileWatcher;
 /**
  * Event handler for events that change the location
  * 
- * @param {PopStateEvent | PushStateEvent} event 
+ * @param {PopStateEvent | PushStateEvent} event
  */
 const locationChange = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
@@ -187,7 +190,8 @@ export const main = async () => {
         iconRepl();
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement executed");
-    }).catch(err => {console.error(`[Dexer] error: err`, err)});
+        locationChange({});
+    }).catch(err => {console.error(`[Dexer] error in main:`, err)});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
