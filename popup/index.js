@@ -1,17 +1,19 @@
 //Detect chrome
-let runtimeStorage = !!chrome ? chrome.storage : browser.storage;
-//Add event listener
-document.body.addEventListener("click", event => {
-    document.getElementsByClassName("sel").item(0).classList.remove("sel");
-    event.target.classList.add("sel");
-    runtimeStorage.sync.set({
-        theme: event.target.id.replace("opt","")
-    });
-});
+let runtime = !!chrome ? chrome : browser;
 //Load saved theme or default
 document.addEventListener("DOMContentLoaded", () => {
-    runtimeStorage.sync.get({theme: 1}).then(res => {
-        document.getElementsByClassName("sel").item(0).classList.remove("sel");
+    //Add event listener
+    document.getElementById("flex").addEventListener("click", event => {
+        try {document.getElementsByClassName("sel").item(0).classList.remove("sel")} catch{}
+        event.target.classList.add("sel");
+        runtime.storage.sync.set({
+            theme: event.target.id.replace("opt","")
+        });
+    });
+    document.getElementById("desc").innerText = runtime.i18n.getMessage("themeDescription");
+    runtime.storage.sync.get({theme: 1}).then(res => {
+        console.log(res)
+        try{document.getElementsByClassName("sel").item(0).classList.remove("sel");}catch{}
         document.getElementById(`opt${res.theme}`).classList.add("sel");
     });
 })
