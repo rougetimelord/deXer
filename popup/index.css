@@ -38,7 +38,7 @@ html, body {
 }
 
 #opt1::after {
-    content: __MSG_blue__;
+    content: '__MSG_blue__';
     position: relative;
     top: calc(64px + 0.25rem);
 }
@@ -48,7 +48,7 @@ html, body {
 }
 
 #opt2::after {
-    content: __MSG_black__;
+    content: '__MSG_black__';
     position: relative;
     top: calc(64px + 0.25rem);
 }
@@ -58,7 +58,7 @@ html, body {
 }
 
 #opt3::after {
-    content: __MSG_white__;
+    content: '__MSG_white__';
     position: relative;
     top: calc(64px + 0.25rem);
 }
