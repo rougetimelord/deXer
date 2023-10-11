@@ -6,6 +6,8 @@ script.src = url("scripts/helpers/historyOverwrite.js");
 script.id = "dex";
 document.head.insertBefore(script, document.head.firstChild);
 
+export const delay = async ms => new Promise(res => setTimeout(res, ms));
+
 /**
  * @type {Object} logos
  * @type {string} logos.1 Blue logo svg
