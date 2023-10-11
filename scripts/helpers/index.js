@@ -6,6 +6,11 @@ script.src = url("scripts/helpers/historyOverwrite.js");
 script.id = "dex";
 document.head.insertBefore(script, document.head.firstChild);
 
+/**
+ * Asynchronous delay function
+ * @param {number} ms 
+ * @returns A promise that resolves after a `ms` wait
+ */
 export const delay = async ms => new Promise(res => setTimeout(res, ms));
 
 /**

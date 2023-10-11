@@ -3,26 +3,27 @@ const browserRuntime = !!chrome ? chrome : browser;
 
 /**
  * Gets theme from storage
- * 
- * @param {Object} obj key: default pairing
  * @returns Theme number
  */
-export const themeGetter = async (obj) => {
-    let res = await browserRuntime.storage.sync.get(obj);
-    return res;
+export const themeGetter = async () => {
+    return await browserRuntime.storage.sync.get({"theme": 1});
 }
 
 /**
+ * @callback StorageChangeCallback
+ * @param {any} newValue The new value of the provided key
+ */
+/**
  * Adds a storage listener
  * 
- * @param {Function} callback Gets called with whatever changes.key is
+ * @param {StorageChangeCallback} callback Gets called with whatever changes.key is
  * @param {string} key
  */
-export const storageListener = async (callback, key) => {
+export const storageListener = async (callback) => {
     browserRuntime.storage.onChanged.addListener(
         async (changes) => {
-            if(Object.keys(changes).includes(key)){
-                callback(changes[key].newValue);
+            if(Object.keys(changes).includes("theme")){
+                callback(changes.theme.newValue);
             }
         }
     );
