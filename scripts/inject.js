@@ -44,12 +44,8 @@ const iconRepl = async () => {
  * Replaces logos on page
  */
 const logoRepl = async () => {
-    let mainLogo = document.querySelector(
-        "a[href~='/home']>div>svg"),
-    accentLogo = document.querySelector(
-        "a[href~='/i/verified-choose']>div>div>svg");
-    mainLogo.innerHTML = helpers.logos[theme];
-    accentLogo.innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
+    document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme]
+    document.querySelector("a[href~='/i/verified-choose']>div>div>svg") = helpers.logos[(theme != 3) ? 2 : 3];
     console.debug("[Dexer] logos replaced")
 }
 
@@ -71,10 +67,10 @@ const interceptRetweetMenu = async es => {
  * 
  */
 const retweetMenuStart = async () => {
-    helpers.mutation.waitForElement("#layers", async e => {
+    helpers.mutation.waitForElement("#layers", async es => {
         helpers.mutation.waitForElement(
             "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
-            interceptRetweetMenu, e[0], false
+            interceptRetweetMenu, es[0], false
         )
     });
 }
@@ -106,8 +102,8 @@ const newNotifications = async (mutations, observer, target, options) => {
 const notificationPage = async () => {
     helpers.mutation.waitForElement(
         "div[aria-label~='Notifications']",
-        async elems => {
-            let timeline = elems[0];
+        async es => {
+            let timeline = es[0];
             //Replace first batch of notifications
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
@@ -121,11 +117,11 @@ const notificationPage = async () => {
 
 let profileWatcher;
 /**
- * Event handler for events that change the location
+ * Fires functions that depend on what the current page is
  * 
  * @param {PopStateEvent | PushStateEvent} event
  */
-const locationChange = async event => {
+const locationHandler = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
     if(!!state && state.state.previousPath == "/i/communitynotes"){
         helpers.mutation.waitForElement(
@@ -191,7 +187,7 @@ export const main = async () => {
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement executed");
     }).catch(err => {console.error(`[Dexer] error in main:`, err)});
-    locationChange({});
+    locationHandler({});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
@@ -202,6 +198,6 @@ export const main = async () => {
         e, titleRepl
     )
     //Add location change listeners
-    window.addEventListener("pushstate", locationChange, {passive: true});
-    window.addEventListener("popstate", locationChange, {passive: true});
+    window.addEventListener("pushstate", locationHandler, {passive: true});
+    window.addEventListener("popstate", locationHandler, {passive: true});
 }
