@@ -77,6 +77,45 @@ const retweetMenuStart = async () => {
     });
 }
 
+/**
+ * Replaces the word "post" in notifications as they load in
+ * 
+ * @type {import('./helpers/mutation').extendedMutationCallBack}
+ */
+const newNotifications = async (mutations, observer, target, options) => {
+    observer.disconnect()
+    mutations.forEach(async mutation => {
+        mutation.addedNodes.forEach(
+            async node => {
+                node.querySelectorAll("div>span>span").forEach(
+                    text => {
+                        text.innerHTML = text.innerHTML.replace("post", "tweet");
+                    }
+                )
+            });
+    })
+    observer.observe(target, options);
+}
+
+/**
+ * Starts watching the notification page
+ */
+const notificationPage = async () => {
+    helpers.mutation.waitForElement(
+        "div[aria-label~='Notifications']",
+        async elems => {
+            let timeline = elems[0];
+            //Replace first batch of notifications
+            timeline.querySelectorAll("div>span>span").forEach(
+                text => {
+                    text.innerHTML = text.innerHTML.replace("post", "tweet");
+                }
+            )
+            helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
+        }
+    );
+}
+
 let profileWatcher;
 /**
  * Event handler for events that change the location
@@ -93,12 +132,20 @@ const locationChange = async event => {
         return;
     }
 
-    const location = window.location.pathname;
+    let location = window.location.pathname;
+    while(!!state && location == state.state.previousPath){
+        //This sucks!! :( don't know any better ways though
+        await helpers.delay(5);
+        location = window.location.pathname;
+    }
     const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
     if(location.match(links)){
         if(!!profileWatcher){
             profileWatcher.disconnect();
             profileWatcher = undefined;
+        }
+        else if(location.match(/\/notifications/)){
+            notificationPage();
         }
         return;
     }
