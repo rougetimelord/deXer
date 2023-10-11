@@ -56,7 +56,7 @@ const logoRepl = async () => {
  */
 const interceptRetweetMenu = async es => {
     if(!es[0].classList.contains("dxd")){
-        es[0].replaceText("post", "tweet");
+        es[0].replaceText(/post/i, "tweet");
         es[0].classList.add("dxd");
         console.debug("[Dexer] retweet popup replaced")
     }
@@ -87,7 +87,7 @@ const newNotifications = async (mutations, observer, target, options) => {
             async node => {
                 node.querySelectorAll("div>span>span").forEach(
                     async text => {
-                        text.replaceText("post", "tweet");
+                        text.replaceText(/post/i, "tweet");
                     }
                 )
             });
@@ -101,13 +101,13 @@ const newNotifications = async (mutations, observer, target, options) => {
  */
 const notificationPage = async () => {
     helpers.mutation.waitForElement(
-        "div[aria-label~='Notifications']",
+        "section[aria-labelledby='accessible-list-1']>div",
         async es => {
             let timeline = es[0];
             //Replace first batch of notifications
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
-                    text.replaceText("post", "tweet");
+                    text.replaceText(/post/i, "tweet");
                 }
             )
             helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
