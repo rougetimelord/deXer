@@ -1,0 +1,22 @@
+{
+    "extensionDescription": {
+        "message": "Makes X look like Twitter",
+        "description": "Extension description"
+    },
+    "blue": {
+        "message": "Blue",
+        "description": "The color blue"
+    },
+    "black": {
+        "message": "Black",
+        "description": "The color black"
+    },
+    "white": {
+        "message": "White",
+        "description": "The color white"
+    },
+    "themeDescription": {
+        "message": "Pick your logo style:",
+        "description": "Text to describe logo styles"
+    }
+}
