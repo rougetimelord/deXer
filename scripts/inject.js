@@ -16,10 +16,13 @@ helpers.runtime.storageListener(
 
 /**
  * Replaces the page title
+ * 
+ * @type {import('./helpers/mutation').ExtendedMutationCallBack}
+ * @param {HTMLElement} target
  */
-const titleRepl = async () =>{
-    if(document.querySelector("title").innerText.match(/X$/)){
-        document.querySelector("title").replaceText(/X$/, "Twitter")
+const titleRepl = async (...[,,target]) =>{
+    if(target.innerText.match(/X$/)){
+        target.replaceText(/X$/, "Twitter")
         console.debug("[Dexer] changed title")
     }
 }
@@ -79,7 +82,7 @@ const retweetMenuStart = async () => {
 /**
  * Replaces the word "post" in notifications as they load in
  * 
- * @type {import('./helpers/mutation').extendedMutationCallBack}
+ * @type {import('./helpers/mutation').ExtendedMutationCallBack}
  */
 const newNotifications = async (mutations, observer, target, options) => {
     observer.disconnect()
