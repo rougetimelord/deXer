@@ -18,5 +18,9 @@
     "themeDescription": {
         "message": "Pick your logo style:",
         "description": "Text to describe logo styles"
+    },
+    "notificationTweet":{
+        "message": "tweet",
+        "description": "String to use to replace post in the notification timeline"
     }
 }
