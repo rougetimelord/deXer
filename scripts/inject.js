@@ -190,8 +190,8 @@ export const main = async () => {
         iconRepl();
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement executed");
-        locationChange({});
     }).catch(err => {console.error(`[Dexer] error in main:`, err)});
+    locationChange({});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
