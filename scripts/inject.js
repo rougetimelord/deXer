@@ -97,6 +97,7 @@ const newNotifications = async (mutations, observer, target, options) => {
             });
     });
     observer.observe(target, options);
+    console.debug("[Dexer] notification text(s) changed")
 }
 
 /**
@@ -122,7 +123,7 @@ let profileWatcher;
 /**
  * Event handler for events that change the location
  * 
- * @param {PopStateEvent | PushStateEvent} event 
+ * @param {PopStateEvent | PushStateEvent} event
  */
 const locationChange = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
@@ -189,7 +190,8 @@ export const main = async () => {
         iconRepl();
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement executed");
-    }).catch(err => {console.error(`[Dexer] error: err`, err)});
+        locationChange({});
+    }).catch(err => {console.error(`[Dexer] error in main:`, err)});
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
