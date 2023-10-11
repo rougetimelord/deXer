@@ -2,6 +2,15 @@
 const browserRuntime = !!chrome ? chrome : browser;
 
 /**
+ * Gets an i18n message
+ * @param {string} name 
+ * @returns {string}
+ */
+export const i18nGetter = (name) => {
+    return browserRuntime.i18n.getMessage(name);
+}
+
+/**
  * Gets theme from storage
  * @returns Theme number
  */

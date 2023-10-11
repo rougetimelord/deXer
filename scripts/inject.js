@@ -87,7 +87,7 @@ const newNotifications = async (mutations, observer, target, options) => {
             async node => {
                 node.querySelectorAll("div>span>span").forEach(
                     async text => {
-                        text.replaceText(/post/i, "tweet");
+                        text.replaceText(/post/i, helpers.notificationTweet);
                     }
                 )
             });
@@ -107,7 +107,7 @@ const notificationPage = async () => {
             //Replace first batch of notifications
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
-                    text.replaceText(/post/i, "tweet");
+                    text.replaceText(/post/i, helpers.notificationTweet);
                 }
             )
             helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
