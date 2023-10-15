@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("flex").addEventListener("click", event => {
         try {document.getElementsByClassName("sel").item(0).classList.remove("sel")} catch{}
         event.target.classList.add("sel");
+        const option = parseInt(event.target.id);
         runtime.storage.sync.set({
-            theme: event.target.id.replace("opt","")
+            theme: option > 0 ? option : 1
         });
     });
     document.getElementById("desc").innerText = runtime.i18n.getMessage("themeDescription");
     runtime.storage.sync.get({theme: 1}).then(res => {
-        console.log(res)
-        try{document.getElementsByClassName("sel").item(0).classList.remove("sel");}catch{}
+        try{document.getElementsByClassName("sel").item(0).classList.remove("sel")} catch{}
         document.getElementById(`opt${res.theme}`).classList.add("sel");
     });
 })
