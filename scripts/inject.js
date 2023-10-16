@@ -1,4 +1,5 @@
-import * as helpers from '/scripts/helpers/index.js'
+import * as helpers from './helpers/index.js'
+import * as pages from './pages.js'
 
 let theme;
 
@@ -76,59 +77,18 @@ const retweetMenuStart = async () => {
 }
 
 /**
- * Replaces the word "post" in notifications as they load in
- * 
- * @type {import('./helpers/mutation').ExtendedMutationCallBack}
- */
-const newNotifications = async (mutations, observer, target, options) => {
-    observer.disconnect()
-    mutations.forEach(async mutation => {
-        mutation.addedNodes.forEach(
-            async node => {
-                node.querySelectorAll("div>span>span").forEach(
-                    async text => {
-                        text.replaceText(/post/i, helpers.notificationTweet);
-                    }
-                )
-            });
-    });
-    observer.observe(target, options);
-    console.debug("[Dexer] notification text(s) changed")
-}
-
-/**
- * Starts watching the notification page
- */
-const notificationPage = async () => {
-    helpers.mutation.waitForElement(
-        "div[tabindex='0']>div>section>div",
-        async es => {
-            let timeline = es[0];
-            //Replace first batch of notifications
-            timeline.querySelectorAll("div>span>span").forEach(
-                text => {
-                    text.replaceText(/post/i, helpers.notificationTweet);
-                }
-            )
-            helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
-        }
-    );
-}
-
-let profileWatcher;
-/**
  * Fires functions that depend on what the current page is
  * 
  * @param {PopStateEvent | PushStateEvent} event
  */
 const locationHandler = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
+
     if(!!state && state.state.previousPath == "/i/communitynotes"){
         helpers.mutation.waitForElement(
             "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
         );
         console.debug("[Dexer] left community notes, logo replaced")
-        return;
     }
 
     let location = window.location.pathname;
@@ -137,27 +97,15 @@ const locationHandler = async event => {
         await helpers.delay(5);
         location = window.location.pathname;
     }
-    const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
-    if(location.match(links)){
-        if(!!profileWatcher){
-            profileWatcher.disconnect();
-            profileWatcher = undefined;
-        }
-        else if(location.match(/\/notifications/)){
-            notificationPage();
-        }
-        return;
+
+    if(location.match(/\/notifications/)){
+        pages.notifications();
     }
 
-    helpers.mutation.waitForElement(
-        `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
-            profileWatcher = obs;
-            if(!es[0].classList.contains("dxd")){
-                es[0].innerText = "Tweets";
-                es[0].classList.add("dxd");
-                console.debug("[Dexer] replaced posts text on profile")
-            }
-        }, document.getElementsByTagName("main")[0], false);
+    const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
+    if(!location.match(links)){
+        pages.profile();
+    }
 }
 
 /**
