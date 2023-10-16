@@ -21,7 +21,7 @@ Load as unpacked, good luck have fun.
 - Replace text in settings menu
 - Log in/sign up page (least likely)
 - Add option to copy `fxtwitter` links
--
+- Replace "Reposted by" above tweets in the home timeline
 - More shit???...
 
 ### Guidelines
