@@ -129,7 +129,7 @@ const locationHandler = async event => {
             observers.home.abort();
             delete observers.home;
         }
-        if(!"profile" in observers) {
+        if(!("profile" in observers)) {
             observers.profile = await pages.profile();
         }
     } else if ("profile" in observers) {
