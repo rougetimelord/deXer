@@ -100,20 +100,38 @@ const locationHandler = async event => {
 
     if(location.match(/\/notifications/)){
         pages.notifications();
+        if ("home" in observers) {
+            observers.home.abort();
+            delete observers.home;
+        }
+        if ("profile" in observers) {
+            observers.profile.abort()
+            delete observers.profile;
+        }
         return;
     }
     
     if (location.match(/\/home/)){
         observers.home = await pages.home();
+        if ("profile" in observers) {
+            observers.profile.abort()
+            delete observers.profile;
+        }
         return;
     } else if ("home" in observers) {
         observers.home.abort();
         delete observers.home;
     }
 
-    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))|(\/twitter)/;
+    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)/;
     if(!location.match(links)){
-        observers.profile = await pages.profile();
+        if ("home" in observers) {
+            observers.home.abort();
+            delete observers.home;
+        }
+        if(!"profile" in observers) {
+            observers.profile = await pages.profile();
+        }
     } else if ("profile" in observers) {
         observers.profile.abort()
         delete observers.profile;
