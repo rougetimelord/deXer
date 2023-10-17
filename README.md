@@ -15,13 +15,13 @@ Load as unpacked, good luck have fun.
 - Replaces "repost" in retweet drop down
 - Replaces "posts" on profiles
 - Replaces "posts" on notifications page
+- Replace "Reposted by" above tweets in the home timeline
 
 ### Features for later??? Maybe??
 - Footer copyright text removal
 - Replace text in settings menu
 - Log in/sign up page (least likely)
 - Add option to copy `fxtwitter` links
-- Replace "Reposted by" above tweets in the home timeline
 - More shit???...
 
 ### Guidelines
