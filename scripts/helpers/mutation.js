@@ -12,11 +12,13 @@ import { ObserverAbort } from "./ObserverAbort.js";
  * 
  * @param {string} selectorList Selectors to look for
  * @param {waitForElementCallback} callback 
- * @param {HTMLElement} [target=document.body]
- * @param {boolean} [once=true] Whether to run once
+ * @param {WaitForElementsOpts} options
+ * @param {Node | undefined} [options.target = document.body]
+ * @param {boolean | undefined} [options.once = true]
  * @returns {ObserverAbort}
  */
-export const waitForElement = async (selectorList, callback, target=document, once=true) => {
+export const waitForElement = async (selectorList, callback, options={}) => {
+    options = {...{target: document.body, once:true}, ...options}
     try{
         const es0 = document.querySelectorAll(selectorList);
         if(es0.length >= selectorList.split(/,\s*/).length){
@@ -30,12 +32,12 @@ export const waitForElement = async (selectorList, callback, target=document, on
             const elements = document.querySelectorAll(selectorList);
             if(elements.length >= selectorList.split(/,\s*/).length){
                 callback(elements, observer);
-                if(once){observer.disconnect()}
+                if(options.once){observer.disconnect()}
             }
         }
     );
     try{
-        observer.observe(target, {subtree: true, childList: true});
+        observer.observe(options.target, {subtree: true, childList: true});
         return new ObserverAbort(observer);
     } catch (err) {
         console.error(`[Dexer] error in WFE:`, err, selectorList, target)
