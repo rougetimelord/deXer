@@ -15,7 +15,7 @@ Load as unpacked, good luck have fun.
 - Replaces "repost" in retweet drop down
 - Replaces "posts" on profiles
 - Replaces "posts" on notifications page
-- Replace "Reposted by" above tweets in the home timeline
+- Replaces "reposted by" above tweets in the home timeline and following notifications timeline
 
 ### Features for later??? Maybe??
 - Footer copyright text removal

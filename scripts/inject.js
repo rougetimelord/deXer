@@ -111,8 +111,11 @@ const locationHandler = async event => {
         return;
     }
     
-    if (location.match(/\/home/)){
+    if (location.match(/\/home|\/i\/timeline/)){
         observers.home = await pages.home();
+        if (location.match(/\/i\/timeline/)){
+            helpers.mutation.waitForElement("h2>span",async es => es[0].replaceText("Posts","Tweets"))
+        }
         if ("profile" in observers) {
             observers.profile.abort()
             delete observers.profile;
