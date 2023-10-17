@@ -25,6 +25,7 @@ const newNotifications = async (mutations, observer, target, options) => {
  * Starts watching the notification page
  */
 export const notifications = async () => {
+    let abort;
     helpers.mutation.waitForElement(
         "div[tabindex='0']>div>section>div",
         async es => {
@@ -35,13 +36,14 @@ export const notifications = async () => {
                     text.replaceText(/post/i, helpers.notificationTweet);
                 }
             )
-            helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
+            abort = helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
         }
     );
+    return abort;
 }
 
 export const profile = async () => {
-    helpers.mutation.waitForElement(
+    return helpers.mutation.waitForElement(
         `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
             if(!es[0].classList.contains("dxd")){
                 es[0].innerText = "Tweets";
