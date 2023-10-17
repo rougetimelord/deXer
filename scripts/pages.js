@@ -66,5 +66,5 @@ export const profile = async () => {
                 es[0].classList.add("dxd");
                 console.debug("[Dexer] replaced posts text on profile")
             }
-        }, {target: document.getElementsByTagName("main")[0], once: false});
+        }, {once: false});
 }
