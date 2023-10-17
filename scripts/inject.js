@@ -1,7 +1,7 @@
 import * as helpers from './helpers/index.js'
 import * as pages from './pages.js'
 
-let theme;
+let theme, observers = {};
 
 //Watch for theme changes, and rerun replacements
 helpers.runtime.storageListener(
@@ -68,8 +68,8 @@ const interceptRetweetMenu = async es => {
  * 
  */
 const retweetMenuStart = async () => {
-    helpers.mutation.waitForElement("#layers", async es => {
-        helpers.mutation.waitForElement(
+     helpers.mutation.waitForElement("#layers", async es => {
+        observers.retweetMenu = await helpers.mutation.waitForElement(
             "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
             interceptRetweetMenu, es[0], false
         )
@@ -99,12 +99,18 @@ const locationHandler = async event => {
     }
 
     if(location.match(/\/notifications/)){
-        pages.notifications();
+        observers.notifications = await pages.notifications();
+    } else if ("notifications" in observers) {
+        observers.notifications.abort();
+        delete observers.notifications;
     }
 
     const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
     if(!location.match(links)){
-        pages.profile();
+        observers.profile = await pages.profile();
+    } else if ("profile" in observers) {
+        observers.profile.abort()
+        delete observers.profile;
     }
 }
 
@@ -140,7 +146,7 @@ export const main = async () => {
     let e = document.createElement("title");
     e.innerText = "Twitter";
     document.head.append(e)
-    helpers.mutation.watchElement(
+    observers.title = await helpers.mutation.watchElement(
         e, titleRepl
     )
     //Add location change listeners
