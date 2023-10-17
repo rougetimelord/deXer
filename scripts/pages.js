@@ -29,7 +29,7 @@ export const notifications = async () => {
     helpers.mutation.waitForElement(
         "div[tabindex='0']>div>section>div",
         async es => {
-            let timeline = es[0];
+            const timeline = es[0];
             //Replace first batch of notifications
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
@@ -40,6 +40,18 @@ export const notifications = async () => {
         }
     );
     return abort;
+}
+
+/**
+ * Starts watching the home timeline
+ */
+export const home = async () => {
+    return helpers.mutation.waitForElement(
+        "span[data-testid='socialContext']",
+        async es => {
+            es.forEach(async element => element.replaceText(/post/i, "tweet"))
+        }, document.body, false
+    );
 }
 
 export const profile = async () => {

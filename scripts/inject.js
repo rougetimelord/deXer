@@ -104,8 +104,15 @@ const locationHandler = async event => {
         observers.notifications.abort();
         delete observers.notifications;
     }
+    
+    if (location.match(/\/home/)){
+        observers.home = await pages.home();
+    } else if ("home" in observers) {
+        observers.home.abort();
+        delete observers.home;
+    }
 
-    const links = /(\/home)|(\/explore)|(\/notifications)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
+    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
     if(!location.match(links)){
         observers.profile = await pages.profile();
     } else if ("profile" in observers) {
