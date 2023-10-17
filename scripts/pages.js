@@ -39,7 +39,6 @@ export const notifications = async () => {
             abort = helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
         }
     );
-    return abort;
 }
 
 /**
@@ -49,8 +48,13 @@ export const home = async () => {
     return helpers.mutation.waitForElement(
         "span[data-testid='socialContext']",
         async es => {
-            es.forEach(async element => element.replaceText(/post/i, "tweet"))
-        }, document.body, false
+            es.forEach(async element => {
+                if(!element.classList.contains('dxd')){
+                    element.replaceText(/post/i, "tweet");
+                    element.classList.add('dxd');
+                }
+            });
+        }, {once: false}
     );
 }
 

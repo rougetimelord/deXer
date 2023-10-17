@@ -71,7 +71,7 @@ const retweetMenuStart = async () => {
      helpers.mutation.waitForElement("#layers", async es => {
         observers.retweetMenu = await helpers.mutation.waitForElement(
             "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
-            interceptRetweetMenu, es[0], false
+            interceptRetweetMenu, {target: es[0], once:false}
         )
     });
 }
@@ -84,35 +84,34 @@ const retweetMenuStart = async () => {
 const locationHandler = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
 
-    if(!!state && state.state.previousPath == "/i/communitynotes"){
+    if(!!state && "state" in state && state.state.previousPath == "/i/communitynotes"){
         helpers.mutation.waitForElement(
-            "a[href~='/i/verified-choose']>div>div>svg", logoRepl, document.getElementById("react-root")
+            "a[href~='/i/verified-choose']>div>div>svg", logoRepl, {target: document.getElementById("react-root")}
         );
         console.debug("[Dexer] left community notes, logo replaced")
     }
 
     let location = window.location.pathname;
-    while(!!state && location == state.state.previousPath){
+    while(!!state && "state" in state && location == state.state.previousPath){
         //This sucks!! :( don't know any better ways though
         await helpers.delay(5);
         location = window.location.pathname;
     }
 
     if(location.match(/\/notifications/)){
-        observers.notifications = await pages.notifications();
-    } else if ("notifications" in observers) {
-        observers.notifications.abort();
-        delete observers.notifications;
+        pages.notifications();
+        return;
     }
     
     if (location.match(/\/home/)){
         observers.home = await pages.home();
+        return;
     } else if ("home" in observers) {
         observers.home.abort();
         delete observers.home;
     }
 
-    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))/;
+    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/\w+\/(?!with_replies|highlights|media|likes))|(\/twitter)/;
     if(!location.match(links)){
         observers.profile = await pages.profile();
     } else if ("profile" in observers) {
@@ -129,18 +128,15 @@ export const main = async () => {
     helpers.clipboard();
     // //Replace placeholder logo
     helpers.mutation.waitForElement("#placeholder>svg",
-        /**
-         * @param {NodeListOf<Element>} es 
-         */
         es => {
             es[0].innerHTML = helpers.logos[2];
-    })
+    });
     //Get theme and run initial replacements
     helpers.runtime.themeGetter().then(res => {
         theme = res.theme;
     }).then(() =>{
         helpers.mutation.waitForElement(
-            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl, (!!document.getElementById("react-root")) ? document.getElementById("react-root") : document
+            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl
         );
         iconRepl();
     }).finally(() => {
