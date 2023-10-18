@@ -16,10 +16,12 @@ Load as unpacked, good luck have fun.
 - Replaces "posts" on profiles
 - Replaces "posts" on notifications page
 - Replaces "reposted by" above tweets in the home timeline and following notifications timeline
+- Replaces "post" in the tweet button on home screen
+- Replaces "Show `x` posts" banner at the top of timelines
 
 ### Features for later??? Maybe??
 - Footer copyright text removal
-- Replace text in settings menu
+- Replace text in settings menus
 - Log in/sign up page (least likely)
 - Add option to copy `fxtwitter` links
 - More shit???...

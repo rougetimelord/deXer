@@ -113,9 +113,14 @@ const locationHandler = async event => {
         observers.profile = await pages.profile();
     }
 
-    if ((location.match(/\/home|\/i\/timeline/) || !location.match(links)) && !("timeline" in observers)){
-        observers.timeline = await pages.timeline();
-        console.debug("[Dexer] Timeline observer attached")
+    if (location.match(/\/home|\/i\/timeline/) || !location.match(links)){
+        if(!("timeline" in observers)){
+            observers.timeline = await pages.timeline();
+            console.debug("[Dexer] Timeline observer attached")
+        }
+        if (location.match(/\/home/)) {
+            helpers.mutation.waitForElement("div[data-testid='tweetButtonInline']", async es => es[0].replaceText("Post", "Tweet"))
+        }
         return;
     }
 }

@@ -44,7 +44,7 @@ export const notifications = async () => {
  */
 export const timeline = async () => {
     return helpers.mutation.waitForElement(
-        "span[data-testid='socialContext']",
+        "span[data-testid='socialContext'],div[style]>div>div[role]>div>div>span",
         async es => {
             es.forEach(async element => {
                 if(!element.classList.contains('dxd')){
