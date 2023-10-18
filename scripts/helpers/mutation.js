@@ -1,5 +1,3 @@
-import { ObserverAbort } from "./ObserverAbort.js";
-
 /**
  * Callback waiting for an element
  * 
@@ -15,7 +13,7 @@ import { ObserverAbort } from "./ObserverAbort.js";
  * @param {WaitForElementsOpts} options
  * @param {Node | undefined} [options.target = document.body]
  * @param {boolean | undefined} [options.once = true]
- * @returns {ObserverAbort}
+ * @returns {boolean}
  */
 export const waitForElement = async (selectorList, callback, options={}) => {
     options = {...{target: document.body, once:true}, ...options}
@@ -38,7 +36,7 @@ export const waitForElement = async (selectorList, callback, options={}) => {
     );
     try{
         observer.observe(options.target, {subtree: true, childList: true});
-        return new ObserverAbort(observer);
+        return true
     } catch (err) {
         console.error(`[Dexer] error in WFE:`, err, selectorList, target)
     }
@@ -60,15 +58,14 @@ export const waitForElement = async (selectorList, callback, options={}) => {
  * @param {HTMLElement} target 
  * @param {MutationCallback | ExtendedMutationCallBack} callback
  * @param {MutationObserverInit} [options={childList:true}]
- * @returns {ObserverAbort}
+ * @returns {boolean}
  */
 export const watchElement = async (target, callback, options={childList: true}) =>{
     try{
         let observer = new MutationObserver((mutations, observer)=>{callback(mutations, observer, target, options)});
         observer.observe(target, options);
-        return new ObserverAbort(observer);
+        return true;
     } catch (err) {
         console.error(`[Dexer] error in WE: ${err}`, target, callback.name)
-        return;
     }
 }

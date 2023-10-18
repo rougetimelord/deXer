@@ -7,10 +7,7 @@ let theme, observers = {};
 helpers.runtime.storageListener(
     async newTheme => {
         theme = newTheme;
-        Promise.all([
-            logoRepl(),
-            iconRepl()
-        ]).finally(() => {
+        Promise.all([logoRepl(), iconRepl()]).finally(() => {
             console.debug(`[Dexer] updated to theme: ${theme}`);
         }).catch(err => {console.error(`[Dexer] error in theme update:`, err)});
 });
@@ -45,9 +42,13 @@ const iconRepl = async () => {
  * Replaces logos on page
  */
 const logoRepl = async () => {
-    document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme]
-    document.querySelector("a[href~='/i/verified-choose']>div>div>svg").innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
-    console.debug("[Dexer] logos replaced")
+    helpers.mutation.waitForElement(
+        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", async () => {
+            document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme]
+            document.querySelector("a[href~='/i/verified-choose']>div>div>svg").innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
+            console.debug("[Dexer] logos replaced")
+        }
+    );
 }
 
 /**
@@ -85,59 +86,37 @@ const locationHandler = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
 
     if(!!state && "state" in state && state.state.previousPath == "/i/communitynotes"){
-        helpers.mutation.waitForElement(
-            "a[href~='/i/verified-choose']>div>div>svg", logoRepl, {target: document.getElementById("react-root")}
-        );
-        console.debug("[Dexer] left community notes, logo replaced")
+        logoRepl().then(() => console.debug("[Dexer] left community notes, logo replaced"))
     }
 
     let location = window.location.pathname;
-    while(!!state && "state" in state && location == state.state.previousPath){
+    while(typeof state == Object && "state" in state && location == state.state.previousPath){
         //This sucks!! :( don't know any better ways though
         await helpers.delay(5);
         location = window.location.pathname;
     }
 
-    if(location.match(/\/notifications/)){
-        pages.notifications();
-        if ("home" in observers) {
-            observers.home.abort();
-            delete observers.home;
-        }
-        if ("profile" in observers) {
-            observers.profile.abort()
-            delete observers.profile;
-        }
-        return;
-    }
-    
-    if (location.match(/\/home|\/i\/timeline/)){
-        observers.home = await pages.home();
-        if (location.match(/\/i\/timeline/)){
-            helpers.mutation.waitForElement("h2>span",async es => es[0].replaceText("Posts","Tweets"))
-        }
-        if ("profile" in observers) {
-            observers.profile.abort()
-            delete observers.profile;
-        }
-        return;
-    } else if ("home" in observers) {
-        observers.home.abort();
-        delete observers.home;
+    if (location.match(/(\/i\/timeline)|(\/status\/)/)){
+        helpers.mutation.waitForElement("h2>span",async es => es[0].replaceText("Posts","Tweets"))
+        console.debug("[Dexer] Header text updated")
     }
 
-    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)/;
-    if(!location.match(links)){
-        if ("home" in observers) {
-            observers.home.abort();
-            delete observers.home;
-        }
-        if(!("profile" in observers)) {
-            observers.profile = await pages.profile();
-        }
-    } else if ("profile" in observers) {
-        observers.profile.abort()
-        delete observers.profile;
+    if(location.match(/\/notifications/) && !("notifications" in observers)){
+        observers.notifications = await pages.notifications();
+        console.debug("[Dexer] Notifications observer attached")
+        return;
+    }
+
+    const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/i\/)|(\/status\/)/;
+    if(!location.match(links) && !("profile" in observers)){
+        console.debug("[Dexer] Profile observer attached")
+        observers.profile = await pages.profile();
+    }
+
+    if ((location.match(/\/home|\/i\/timeline/) || !location.match(links)) && !("timeline" in observers)){
+        observers.timeline = await pages.timeline();
+        console.debug("[Dexer] Timeline observer attached")
+        return;
     }
 }
 
@@ -156,10 +135,7 @@ export const main = async () => {
     helpers.runtime.themeGetter().then(res => {
         theme = res.theme;
     }).then(() =>{
-        helpers.mutation.waitForElement(
-            "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", logoRepl
-        );
-        iconRepl();
+        return Promise.all([logoRepl(), iconRepl()]);
     }).finally(() => {
         console.debug("[Dexer] first logo and icon replacement executed");
     }).catch(err => {console.error(`[Dexer] error in main:`, err)});

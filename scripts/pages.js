@@ -25,8 +25,7 @@ const newNotifications = async (mutations, observer, target, options) => {
  * Starts watching the notification page
  */
 export const notifications = async () => {
-    let abort;
-    helpers.mutation.waitForElement(
+    return helpers.mutation.waitForElement(
         "div[tabindex='0']>div>section>div",
         async es => {
             const timeline = es[0];
@@ -34,9 +33,8 @@ export const notifications = async () => {
             timeline.querySelectorAll("div>span>span").forEach(
                 text => {
                     text.replaceText(/post/i, helpers.notificationTweet);
-                }
-            )
-            abort = helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
+                });
+            helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
         }
     );
 }
@@ -44,7 +42,7 @@ export const notifications = async () => {
 /**
  * Starts watching the home timeline
  */
-export const home = async () => {
+export const timeline = async () => {
     return helpers.mutation.waitForElement(
         "span[data-testid='socialContext']",
         async es => {
@@ -52,6 +50,7 @@ export const home = async () => {
                 if(!element.classList.contains('dxd')){
                     element.replaceText(/post/i, "tweet");
                     element.classList.add('dxd');
+                    console.debug("[Dexer] Changed social context text")
                 }
             });
         }, {once: false}
