@@ -61,7 +61,7 @@ export const profile = async () => {
     return helpers.mutation.waitForElement(
         `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
             if(!es[0].classList.contains("dxd")){
-                es[0].innerText = "Tweets";
+                es[0].replaceText(/Post/, "Tweet")
                 es[0].classList.add("dxd");
                 console.debug("[Dexer] replaced posts text on profile")
             }
