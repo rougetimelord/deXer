@@ -25,11 +25,11 @@ const newNotifications = async (mutations, observer, target, options) => {
  * @returns {Promise<MutationObserver>}
  */
 export const notifications = async () => {
-    const timeline = (await helpers.mutation.resolveOnElement("div[tabindex='0']>div>section>div"))[0];
-    timeline.querySelectorAll("div>span>span").forEach(
-        async text => text.replaceText(/post/i, helpers.notificationTweet)
-    );
-    return helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
+    return helpers.mutation.resolveOnElement("div[tabindex='0']>div>section>div").then(es => es[0])
+    .then(timeline => {
+        timeline.querySelectorAll("div>span>span").forEach(e => e.replaceText(/post/i, helpers.notificationTweet));
+        return helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
+    });
 }
 
 /**
