@@ -15,7 +15,7 @@ Load as unpacked, good luck have fun.
 - Replaces "repost" in retweet drop down
 - Replaces "posts" on profiles
 - Replaces "posts" on notifications page
-- Replaces "reposted by" above tweets in the home timeline and following notifications timeline
+- Replaces "reposted by" above tweets in the home and notifications timelines
 - Replaces "post" in the tweet button on home screen
 - Replaces "Show `x` posts" banner at the top of timelines
 
