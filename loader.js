@@ -12,7 +12,7 @@
     this.innerHTML = this.innerHTML.replace(searchValue, replaceValue);
   };
   const inject = await import(
-    (!!chrome ? chrome : browser).runtime.getURL("/scripts/inject.js")
+    (!!chrome ? chrome : browser).runtime.getURL("/src/inject.js")
   );
   inject.main();
 })();

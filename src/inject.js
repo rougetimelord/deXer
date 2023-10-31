@@ -1,11 +1,11 @@
-import * as helpers from "./helpers/index.js";
+import * as utils from "./utils/index.js";
 import * as pages from "./pages.js";
 
 let theme = 1,
   /**@type {MutationObserver[]}*/ observers = [];
 
 //Watch for theme changes, and rerun replacements
-helpers.runtime.storageListener(async (newTheme) => {
+utils.runtime.storageListener(async (newTheme) => {
   theme = newTheme;
   Promise.all([logoReplace(), iconReplace()])
     .then(() => {
@@ -19,7 +19,7 @@ helpers.runtime.storageListener(async (newTheme) => {
 /**
  * Replaces the page title
  *
- * @type {import('./helpers/mutation').ExtendedMutationCallBack}
+ * @type {import('./utils/mutation.js').ExtendedMutationCallBack}
  * @param {HTMLElement} target
  */
 const titleReplace = async (_, __, target) => {
@@ -36,7 +36,7 @@ const iconReplace = async () => {
   document.head.removeChild(document.querySelector("link[rel~='icon']"));
   let fav = document.createElement("link");
   fav.rel = "icon";
-  fav.href = helpers.runtime.url(`/assets/logo${theme}.png`);
+  fav.href = utils.runtime.url(`/assets/logo${theme}.png`);
   fav.type = "image/png";
   document.head.appendChild(fav);
   console.debug("[Dexer] icon replaced");
@@ -46,16 +46,16 @@ const iconReplace = async () => {
  * Replaces logos on page
  */
 const logoReplace = async () => {
-  helpers.mutation
+  utils.mutation
     .resolveOnElement(
       "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg",
     )
     .then(() => {
       document.querySelector("a[href~='/home']>div>svg").innerHTML =
-        helpers.logos[theme];
+        utils.logos[theme];
       document.querySelector(
         "a[href~='/i/verified-choose']>div>div>svg",
-      ).innerHTML = helpers.logos[theme != 3 ? 2 : 3];
+      ).innerHTML = utils.logos[theme != 3 ? 2 : 3];
       console.debug("[Dexer] logos replaced");
     })
     .catch((err) => console.error(`[Dexer] error in logoReplace`, err));
@@ -79,10 +79,10 @@ const interceptRetweetMenu = async (es) => {
  *
  */
 const retweetMenuStart = async () => {
-  helpers.mutation
+  utils.mutation
     .resolveOnElement("#layers")
     .then((es) =>
-      helpers.mutation.waitForElement(
+      utils.mutation.waitForElement(
         "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
         interceptRetweetMenu,
         { target: es[0], once: false },
@@ -119,14 +119,14 @@ const locationHandler = async (event) => {
     location == state.state.previousPath
   ) {
     //This sucks!! :( don't know any better ways though
-    await helpers.delay(5);
+    await utils.delay(5);
     location = window.location.pathname;
   }
   observers.forEach((obs) => obs.disconnect());
   observers = [];
 
   if (location.match(/(\/i\/timeline)|(\/status\/)/)) {
-    helpers.mutation
+    utils.mutation
       .resolveOnElement("h2>span")
       .then((es) => es[0].replaceText("Post", "Tweet"))
       .then(() => console.debug("[Dexer] Header text updated"));
@@ -155,7 +155,7 @@ const locationHandler = async (event) => {
       console.debug("[Dexer] Timeline observer attached");
     });
     if (location.match(/\/home/)) {
-      helpers.mutation
+      utils.mutation
         .resolveOnElement("div[data-testid='tweetButtonInline']")
         .then((es) => es[0].replaceText("Post", "Tweet"));
     }
@@ -168,13 +168,13 @@ const locationHandler = async (event) => {
  */
 export const main = async () => {
   //Add copy event listener
-  helpers.clipboard();
+  utils.clipboard();
   // //Replace placeholder logo
-  helpers.mutation
+  utils.mutation
     .resolveOnElement("#placeholder>svg")
-    .then((es) => (es[0].innerHTML = helpers.logos[2]));
+    .then((es) => (es[0].innerHTML = utils.logos[2]));
   //Get theme and run initial replacements
-  helpers.runtime
+  utils.runtime
     .themeGetter()
     .then((res) => {
       theme = res.theme;
@@ -198,6 +198,6 @@ export const main = async () => {
   createTitle().then((e) => {
     e.innerText = "Twitter";
     document.head.append(e);
-    helpers.mutation.watchElement(e, titleReplace);
+    utils.mutation.watchElement(e, titleReplace);
   });
 };
