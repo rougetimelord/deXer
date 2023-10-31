@@ -2,7 +2,7 @@ import { i18nGetter, url } from "./runtime.js";
 
 //Overwrite history.pushState
 const script = document.createElement("script");
-script.src = url("scripts/helpers/historyOverwrite.js");
+script.src = url("src/utils/historyOverwrite.js");
 script.id = "dex";
 document.head.insertBefore(script, document.head.firstChild);
 

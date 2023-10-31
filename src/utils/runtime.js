@@ -14,8 +14,8 @@ export const i18nGetter = (name) => {
  * Gets theme from storage
  * @returns {Number} Theme number
  */
-export const themeGetter = async () => {
-  return await browserRuntime.storage.sync.get({ theme: 1 });
+export const themeGetter = () => {
+  return browserRuntime.storage.sync.get({ theme: 1 });
 };
 
 /**

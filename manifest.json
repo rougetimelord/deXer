@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "deXer",
-    "version": "0.11.2",
+    "version": "0.11.4",
     "author": "r0uge",
     "description": "__MSG_extensionDescription__",
     "default_locale": "en",
@@ -22,7 +22,7 @@
 
     "web_accessible_resources": [
         {
-            "resources": ["/scripts/*", "/assets/*"],
+            "resources": ["/src/*", "/assets/*"],
             "matches": ["*://twitter.com/*", "*://x.com/*"]
         }
     ],
@@ -30,13 +30,13 @@
     "content_scripts":[
         {
             "matches": ["*://twitter.com/*", "*://x.com/*"],
-            "js": ["scripts/loader.js"],
+            "js": ["loader.js"],
             "run_at": "document_start"
         }
     ],
 
     "action":{
-        "default_popup": "popup/index.html"
+        "default_popup": "src/popup/index.html"
     },
     
     "permissions": ["storage"]

@@ -1,8 +1,8 @@
-import * as helpers from "./helpers/index.js";
+import * as helpers from "./utils/index.js";
 
 /**
  * Replaces the word "post" in notifications as they load in
- * @type {import('./helpers/mutation.js').ExtendedMutationCallBack}
+ * @type {import('./utils/mutation.js').ExtendedMutationCallBack}
  */
 const newNotifications = async (mutations, observer, target, options) => {
   observer.disconnect();

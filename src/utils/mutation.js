@@ -24,7 +24,7 @@ export const waitForElement = async (selectorList, callback, options = {}) => {
       return;
     }
   } catch (err) {
-    console.error(`[Dexer] error in WFE pre-check:`, err, selectorList, target);
+    console.error(`[deXer] error in WFE pre-check:`, err, selectorList, target);
   }
   let observer = new MutationObserver(async (mutations, observer) => {
     const elements = document.querySelectorAll(selectorList);
@@ -39,7 +39,7 @@ export const waitForElement = async (selectorList, callback, options = {}) => {
     observer.observe(options.target, { subtree: true, childList: true });
     return observer;
   } catch (err) {
-    console.error(`[Dexer] error in WFE:`, err, selectorList, target);
+    console.error(`[deXer] error in WFE:`, err, selectorList, target);
   }
 };
 
@@ -72,7 +72,7 @@ export const watchElement = async (
     observer.observe(target, options);
     return observer;
   } catch (err) {
-    console.error(`[Dexer] error in WE: ${err}`, target, callback.name);
+    console.error(`[deXer] error in WE: ${err}`, target, callback.name);
   }
 };
 
@@ -92,7 +92,7 @@ export const resolveOnElement = async (selectorList) => {
       }
     } catch (err) {
       console.error(
-        `[Dexer] error in ROE pre-check:`,
+        `[deXer] error in ROE pre-check:`,
         err,
         selectorList,
         target,
@@ -109,7 +109,7 @@ export const resolveOnElement = async (selectorList) => {
     try {
       observer.observe(document, { subtree: true, childList: true });
     } catch (err) {
-      console.error(`[Dexer] error in ROE:`, err, selectorList, target);
+      console.error(`[deXer] error in ROE:`, err, selectorList, target);
       reject(err);
     }
   });
