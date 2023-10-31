@@ -13,7 +13,7 @@
  * @param {WaitForElementsOpts} options
  * @param {Node | undefined} [options.target = document.body]
  * @param {boolean | undefined} [options.once = true]
- * @returns {boolean}
+ * @returns {MutationObserver}
  */
 export const waitForElement = async (selectorList, callback, options={}) => {
     options = {...{target: document.body, once:true}, ...options}
@@ -36,7 +36,7 @@ export const waitForElement = async (selectorList, callback, options={}) => {
     );
     try{
         observer.observe(options.target, {subtree: true, childList: true});
-        return true
+        return observer
     } catch (err) {
         console.error(`[Dexer] error in WFE:`, err, selectorList, target)
     }
@@ -58,14 +58,49 @@ export const waitForElement = async (selectorList, callback, options={}) => {
  * @param {HTMLElement} target 
  * @param {MutationCallback | ExtendedMutationCallBack} callback
  * @param {MutationObserverInit} [options={childList:true}]
- * @returns {boolean}
+ * @returns {MutationObserver}
  */
 export const watchElement = async (target, callback, options={childList: true}) =>{
     try{
         let observer = new MutationObserver((mutations, observer)=>{callback(mutations, observer, target, options)});
         observer.observe(target, options);
-        return true;
+        return observer;
     } catch (err) {
         console.error(`[Dexer] error in WE: ${err}`, target, callback.name)
     }
+}
+
+/**
+ * Returns a promise that resolves once it least one of each element that matches a selector exists.
+ * 
+ * Can not be used to fire functions multiple times, resolves once and is done.
+ * @param {string} selectorList 
+ * @returns {Promise<NodeListOf<Element>>}
+ */
+export const resolveOnElement = async (selectorList) =>{
+    return new Promise((resolve, reject) => {
+        try{
+            const es0 = document.querySelectorAll(selectorList);
+            if(es0.length >= selectorList.split(/,\s*/).length){
+                resolve(es0);}
+        } catch (err) {
+            console.error(`[Dexer] error in ROE pre-check:`, err, selectorList, target);
+            reject(err);
+        }
+        let observer = new MutationObserver(
+            async (mutations, observer) => {
+                const elements = document.querySelectorAll(selectorList);
+                if(elements.length >= selectorList.split(/,\s*/).length){
+                    resolve(elements);
+                    observer.disconnect()
+                }
+            }
+        );
+        try{
+            observer.observe(document, {subtree: true, childList: true});
+        } catch (err) {
+            console.error(`[Dexer] error in ROE:`, err, selectorList, target)
+            reject(err);
+        }
+    });
 }
