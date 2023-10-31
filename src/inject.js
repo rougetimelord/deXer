@@ -9,10 +9,10 @@ utils.runtime.storageListener(async (newTheme) => {
   theme = newTheme;
   Promise.all([logoReplace(), iconReplace()])
     .then(() => {
-      console.debug(`[Dexer] updated to theme: ${theme}`);
+      console.debug(`[deXer] updated to theme: ${theme}`);
     })
     .catch((err) => {
-      console.error(`[Dexer] error in theme update:`, err);
+      console.error(`[deXer] error in theme update:`, err);
     });
 });
 
@@ -25,7 +25,7 @@ utils.runtime.storageListener(async (newTheme) => {
 const titleReplace = async (_, __, target) => {
   if (target.innerText.match(/X$/)) {
     target.replaceText(/X$/, "Twitter");
-    console.debug("[Dexer] changed title");
+    console.debug("[deXer] changed title");
   }
 };
 
@@ -39,7 +39,7 @@ const iconReplace = async () => {
   fav.href = utils.runtime.url(`/assets/logo${theme}.png`);
   fav.type = "image/png";
   document.head.appendChild(fav);
-  console.debug("[Dexer] icon replaced");
+  console.debug("[deXer] icon replaced");
 };
 
 /**
@@ -56,9 +56,9 @@ const logoReplace = async () => {
       document.querySelector(
         "a[href~='/i/verified-choose']>div>div>svg",
       ).innerHTML = utils.logos[theme != 3 ? 2 : 3];
-      console.debug("[Dexer] logos replaced");
+      console.debug("[deXer] logos replaced");
     })
-    .catch((err) => console.error(`[Dexer] error in logoReplace`, err));
+    .catch((err) => console.error(`[deXer] error in logoReplace`, err));
 };
 
 /**
@@ -70,7 +70,7 @@ const interceptRetweetMenu = async (es) => {
   if (!es[0].classList.contains("dxd")) {
     es[0].replaceText(/post/i, "tweet");
     es[0].classList.add("dxd");
-    console.debug("[Dexer] retweet popup replaced");
+    console.debug("[deXer] retweet popup replaced");
   }
 };
 
@@ -108,7 +108,7 @@ const locationHandler = async (event) => {
     state.state.previousPath == "/i/communitynotes"
   ) {
     logoReplace().then(() =>
-      console.debug("[Dexer] left community notes, logo replaced"),
+      console.debug("[deXer] left community notes, logo replaced"),
     );
   }
 
@@ -129,13 +129,13 @@ const locationHandler = async (event) => {
     utils.mutation
       .resolveOnElement("h2>span")
       .then((es) => es[0].replaceText("Post", "Tweet"))
-      .then(() => console.debug("[Dexer] Header text updated"));
+      .then(() => console.debug("[deXer] Header text updated"));
   }
 
   if (location.match(/\/notifications/)) {
     pages.notifications().then((ob) => {
       observers.push(ob);
-      console.debug("[Dexer] Notifications observer attached");
+      console.debug("[deXer] Notifications observer attached");
     });
     return;
   }
@@ -145,14 +145,14 @@ const locationHandler = async (event) => {
   if (!location.match(links)) {
     pages.profile().then((ob) => {
       observers.push(ob);
-      console.debug("[Dexer] Profile observer attached");
+      console.debug("[deXer] Profile observer attached");
     });
   }
 
   if (location.match(/\/home|\/i\/timeline/) || !location.match(links)) {
     pages.timeline().then((ob) => {
       observers.push(ob);
-      console.debug("[Dexer] Timeline observer attached");
+      console.debug("[deXer] Timeline observer attached");
     });
     if (location.match(/\/home/)) {
       utils.mutation
@@ -181,10 +181,10 @@ export const main = async () => {
     })
     .then(() => Promise.all([logoReplace(), iconReplace()]))
     .then(() =>
-      console.debug("[Dexer] first logo and icon replacement executed"),
+      console.debug("[deXer] first logo and icon replacement executed"),
     )
     .catch((err) => {
-      console.error(`[Dexer] error in main:`, err);
+      console.error(`[deXer] error in main:`, err);
     });
   //Fire location specific stuff, then add listeners
   locationHandler({}).then(() => {
