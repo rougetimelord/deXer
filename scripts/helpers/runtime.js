@@ -12,7 +12,7 @@ export const i18nGetter = (name) => {
 
 /**
  * Gets theme from storage
- * @returns Theme number
+ * @returns {Number} Theme number
  */
 export const themeGetter = async () => {
     return await browserRuntime.storage.sync.get({"theme": 1});
