@@ -11,9 +11,7 @@
   ) {
     this.innerHTML = this.innerHTML.replace(searchValue, replaceValue);
   };
-  import(
-    (!!chrome ? chrome : browser).runtime.getURL("/src/inject.js")
-  )
-  .then(injectModule => injectModule.main())
-  .catch(err => console.error("[deXer] Error in injection", err));
+  import((!!chrome ? chrome : browser).runtime.getURL("/src/inject.js"))
+    .then((injectModule) => injectModule.main())
+    .catch((err) => console.error("[deXer] Error in injection", err));
 })();
