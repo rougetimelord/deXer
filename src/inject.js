@@ -122,8 +122,7 @@ const locationHandler = async (event) => {
     await utils.delay(5);
     location = window.location.pathname;
   }
-  observers.forEach((obs) => obs.disconnect());
-  observers = [];
+  try{observers.forEach((obs) => obs.disconnect())}catch{}finally{observers = [];}
 
   if (location.match(/(\/i\/timeline)|(\/status\/)/)) {
     utils.mutation
@@ -132,7 +131,7 @@ const locationHandler = async (event) => {
       .then(() => console.debug("[deXer] Header text updated"));
   }
 
-  if (location.match(/\/notifications/)) {
+  if (location.match(/^\/notifications/)) {
     pages.notifications().then((ob) => {
       observers.push(ob);
       console.debug("[deXer] Notifications observer attached");
@@ -141,7 +140,7 @@ const locationHandler = async (event) => {
   }
 
   const links =
-    /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/i\/)|(\/status\/)/;
+    /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/i\/)|(\/status\/)|(\/home)/;
   if (!location.match(links)) {
     pages.profile().then((ob) => {
       observers.push(ob);
@@ -149,7 +148,7 @@ const locationHandler = async (event) => {
     });
   }
 
-  if (location.match(/\/home|\/i\/timeline/) || !location.match(links)) {
+  if (location.match(/\/home$|\/i\/timeline/) || !location.match(links)) {
     pages.timeline().then((ob) => {
       observers.push(ob);
       console.debug("[deXer] Timeline observer attached");
