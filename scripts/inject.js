@@ -1,13 +1,13 @@
 import * as helpers from './helpers/index.js'
 import * as pages from './pages.js'
 
-let theme, observers = {};
+let theme = 1, /**@type {MutationObserver[]}*/ observers = [];
 
 //Watch for theme changes, and rerun replacements
 helpers.runtime.storageListener(
     async newTheme => {
         theme = newTheme;
-        Promise.all([logoRepl(), iconRepl()]).finally(() => {
+        Promise.all([logoReplace(), iconReplace()]).then(() => {
             console.debug(`[Dexer] updated to theme: ${theme}`);
         }).catch(err => {console.error(`[Dexer] error in theme update:`, err)});
 });
@@ -18,7 +18,7 @@ helpers.runtime.storageListener(
  * @type {import('./helpers/mutation').ExtendedMutationCallBack}
  * @param {HTMLElement} target
  */
-const titleRepl = async (...[,,target]) =>{
+const titleReplace = async (...[,,target]) =>{
     if(target.innerText.match(/X$/)){
         target.replaceText(/X$/, "Twitter")
         console.debug("[Dexer] changed title")
@@ -28,7 +28,7 @@ const titleRepl = async (...[,,target]) =>{
 /**
  * Replaces the tab icon
  */
-const iconRepl = async () => {
+const iconReplace = async () => {
     document.head.removeChild(document.querySelector("link[rel~='icon']"));
     let fav = document.createElement("link");
     fav.rel = "icon";
@@ -41,14 +41,12 @@ const iconRepl = async () => {
 /**
  * Replaces logos on page
  */
-const logoRepl = async () => {
-    helpers.mutation.waitForElement(
-        "a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg", async () => {
-            document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme]
-            document.querySelector("a[href~='/i/verified-choose']>div>div>svg").innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
-            console.debug("[Dexer] logos replaced")
-        }
-    );
+const logoReplace = async () => {
+    helpers.mutation.resolveOnElement("a[href~='/i/verified-choose']>div>div>svg, a[href~='/home']>div>svg").then(() => {
+        document.querySelector("a[href~='/home']>div>svg").innerHTML = helpers.logos[theme];
+        document.querySelector("a[href~='/i/verified-choose']>div>div>svg").innerHTML = helpers.logos[(theme != 3) ? 2 : 3];
+        console.debug("[Dexer] logos replaced");
+    }).catch(err => console.error(`[Dexer] error in logoReplace`, err))
 }
 
 /**
@@ -69,12 +67,11 @@ const interceptRetweetMenu = async es => {
  * 
  */
 const retweetMenuStart = async () => {
-     helpers.mutation.waitForElement("#layers", async es => {
-        observers.retweetMenu = await helpers.mutation.waitForElement(
-            "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
-            interceptRetweetMenu, {target: es[0], once:false}
-        )
-    });
+    helpers.mutation.resolveOnElement("#layers")
+    .then(es => helpers.mutation.waitForElement(
+        "div[data-testid~='Dropdown']>div>div:nth-child(2)>div>span",
+        interceptRetweetMenu, {target: es[0], once:false}
+    ));
 }
 
 /**
@@ -84,42 +81,39 @@ const retweetMenuStart = async () => {
  */
 const locationHandler = async event => {
     const state = (event.state != undefined) ? event.state : (event.detail != undefined) ? event.detail.state : undefined;
-
-    if(!!state && "state" in state && state.state.previousPath == "/i/communitynotes"){
-        logoRepl().then(() => console.debug("[Dexer] left community notes, logo replaced"))
+    if(state !== undefined && "state" in state && state.state.previousPath == "/i/communitynotes"){
+        logoReplace().then(() => console.debug("[Dexer] left community notes, logo replaced"))
     }
 
     let location = window.location.pathname;
-    while(typeof state == Object && "state" in state && location == state.state.previousPath){
+    while(state !== undefined && "state" in state && location == state.state.previousPath){
         //This sucks!! :( don't know any better ways though
         await helpers.delay(5);
         location = window.location.pathname;
     }
+    observers.forEach(obs => obs.disconnect())
+    observers = [];
 
-    if (location.match(/(\/i\/timeline)|(\/status\/)/)){
-        helpers.mutation.waitForElement("h2>span",async es => es[0].replaceText("Posts","Tweets"))
-        console.debug("[Dexer] Header text updated")
+    if(location.match(/(\/i\/timeline)|(\/status\/)/)){
+        helpers.mutation.resolveOnElement("h2>span")
+        .then(es => es[0].replaceText("Post", "Tweet"))
+        .then(() => console.debug("[Dexer] Header text updated"))
     }
 
-    if(location.match(/\/notifications/) && !("notifications" in observers)){
-        observers.notifications = await pages.notifications();
-        console.debug("[Dexer] Notifications observer attached")
+    if(location.match(/\/notifications/)){
+        pages.notifications().then(ob => {observers.push(ob); console.debug("[Dexer] Notifications observer attached")});
         return;
     }
 
     const links = /(\/explore)|(\/compose\/)|(\/messages)|(\/lists)|(\/i\/)|(\/status\/)/;
-    if(!location.match(links) && !("profile" in observers)){
-        console.debug("[Dexer] Profile observer attached")
-        observers.profile = await pages.profile();
+    if(!location.match(links)){
+        pages.profile().then(ob => {observers.push(ob); console.debug("[Dexer] Profile observer attached")})
     }
 
     if (location.match(/\/home|\/i\/timeline/) || !location.match(links)){
-        if(!("timeline" in observers)){
-            observers.timeline = await pages.timeline();
-            console.debug("[Dexer] Timeline observer attached")
-        }
+        pages.timeline().then(ob => {observers.push(ob); console.debug("[Dexer] Timeline observer attached")});
         if (location.match(/\/home/)) {
-            helpers.mutation.waitForElement("div[data-testid='tweetButtonInline']", async es => es[0].replaceText("Post", "Tweet"))
+            helpers.mutation.resolveOnElement("div[data-testid='tweetButtonInline']").then(es => es[0].replaceText("Post", "Tweet"));
         }
         return;
     }
@@ -132,29 +126,24 @@ export const main = async () => {
     //Add copy event listener
     helpers.clipboard();
     // //Replace placeholder logo
-    helpers.mutation.waitForElement("#placeholder>svg",
-        es => {
-            es[0].innerHTML = helpers.logos[2];
-    });
+    helpers.mutation.resolveOnElement("#placeholder>svg").then(es => es[0].innerHTML = helpers.logos[2]);
     //Get theme and run initial replacements
-    helpers.runtime.themeGetter().then(res => {
-        theme = res.theme;
-    }).then(() =>{
-        return Promise.all([logoRepl(), iconRepl()]);
-    }).finally(() => {
-        console.debug("[Dexer] first logo and icon replacement executed");
-    }).catch(err => {console.error(`[Dexer] error in main:`, err)});
-    locationHandler({});
+    helpers.runtime.themeGetter().then(res => {theme = res.theme})
+    .then(() => Promise.all([logoReplace(), iconReplace()]))
+    .then(() => console.debug("[Dexer] first logo and icon replacement executed"))
+    .catch(err => {console.error(`[Dexer] error in main:`, err)});
+    //Fire location specific stuff, then add listeners
+    locationHandler({}).then(() => {
+        window.addEventListener("pushstate", locationHandler, {passive: true});
+        window.addEventListener("popstate", locationHandler, {passive: true});
+    });
     //Start hunting for retweet dropdowns
     retweetMenuStart();
     //Add title element and watch it
-    let e = document.createElement("title");
-    e.innerText = "Twitter";
-    document.head.append(e)
-    observers.title = await helpers.mutation.watchElement(
-        e, titleRepl
-    )
-    //Add location change listeners
-    window.addEventListener("pushstate", locationHandler, {passive: true});
-    window.addEventListener("popstate", locationHandler, {passive: true});
+    const createTitle = async () => document.createElement("title")
+    createTitle().then(e => {
+        e.innerText = "Twitter";
+        document.head.append(e);
+        helpers.mutation.watchElement(e, titleReplace);
+    });
 }
