@@ -122,7 +122,12 @@ const locationHandler = async (event) => {
     await utils.delay(5);
     location = window.location.pathname;
   }
-  try{observers.forEach((obs) => obs.disconnect())}catch{}finally{observers = [];}
+  try {
+    observers.forEach((obs) => obs.disconnect());
+  } catch {
+  } finally {
+    observers = [];
+  }
 
   if (location.match(/(\/i\/timeline)|(\/status\/)/)) {
     utils.mutation
