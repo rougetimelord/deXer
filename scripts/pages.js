@@ -2,7 +2,6 @@ import * as helpers from './helpers/index.js'
 
 /**
  * Replaces the word "post" in notifications as they load in
- * 
  * @type {import('./helpers/mutation.js').ExtendedMutationCallBack}
  */
 const newNotifications = async (mutations, observer, target, options) => {
@@ -23,24 +22,19 @@ const newNotifications = async (mutations, observer, target, options) => {
 
 /**
  * Starts watching the notification page
+ * @returns {Promise<MutationObserver>}
  */
 export const notifications = async () => {
-    return helpers.mutation.waitForElement(
-        "div[tabindex='0']>div>section>div",
-        async es => {
-            const timeline = es[0];
-            //Replace first batch of notifications
-            timeline.querySelectorAll("div>span>span").forEach(
-                text => {
-                    text.replaceText(/post/i, helpers.notificationTweet);
-                });
-            helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
-        }
+    const timeline = (await helpers.mutation.resolveOnElement("div[tabindex='0']>div>section>div"))[0];
+    timeline.querySelectorAll("div>span>span").forEach(
+        async text => text.replaceText(/post/i, helpers.notificationTweet)
     );
+    return helpers.mutation.watchElement(timeline, newNotifications, {childList: true, subtree: true});
 }
 
 /**
  * Starts watching the home timeline
+ * @returns {Promise<MutationObserver>}
  */
 export const timeline = async () => {
     return helpers.mutation.waitForElement(
@@ -57,6 +51,10 @@ export const timeline = async () => {
     );
 }
 
+/**
+ * Starts watching the ribbon on profiles
+ * @returns {Promise<MutationObserver>}
+ */
 export const profile = async () => {
     return helpers.mutation.waitForElement(
         `a[href='/${window.location.pathname.split("/")[1]}'][role='tab']>div>div>span`, async (es, obs) => {
