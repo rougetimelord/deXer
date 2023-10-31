@@ -18,7 +18,7 @@ helpers.runtime.storageListener(
  * @type {import('./helpers/mutation').ExtendedMutationCallBack}
  * @param {HTMLElement} target
  */
-const titleReplace = async (_, _, target) =>{
+const titleReplace = async (_, __, target) => {
     if(target.innerText.match(/X$/)){
         target.replaceText(/X$/, "Twitter")
         console.debug("[Dexer] changed title")
