@@ -42,7 +42,7 @@ export const storageListener = async (callback) => {
  * Generates an extension URL for path
  * 
  * @param {string} path 
- * @returns 
+ * @returns {string}
  */
 export const url = (path) => {
     return browserRuntime.runtime.getURL(path);
