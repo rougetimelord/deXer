@@ -1,6 +1,7 @@
 :root {
   --main-bg: #2d2d2d;
   --sel-bg: #3a3a3a;
+  --check-bg: #5b5b5b;
   --hover-bg: rgba(255, 255, 255, 0.15);
   --active-bg: rgba(255, 255, 255, 0.2);
   --main-text: #fff;
@@ -11,7 +12,7 @@
 html,
 body {
   width: 500px;
-  height: 200px;
+  height: 210px;
   background: var(--main-bg);
   color: var(--main-text);
   text-align: center;
@@ -98,4 +99,24 @@ body {
 img {
   height: 64px;
   width: auto;
+}
+
+form {margin-top: 0.25rem; color: var(--minor-text); 
+  font-size: 1rem;}
+form>div{display: inline-block;}
+input{display: none;}
+input + label{
+  display: inline-block;
+  background-color: var(--check-bg);
+  border-radius: 5px;
+  height: 1.1rem;
+  width: 1.1rem;
+  transform: translateY(25%);
+  color: #fff;
+}
+input:checked + label:after{
+  content: '\2713';
+  position: absolute;
+  top: -0.15rem;
+  left: 0.15rem;
 }
