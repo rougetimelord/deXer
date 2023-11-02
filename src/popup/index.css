@@ -7,12 +7,13 @@
   --main-text: #fff;
   --minor-text: #9a9a9a;
   --activity-shadow: rgba(29, 161, 242, 0.2);
+  --opt-width: calc(64px + 1rem)
 }
 
-html,
 body {
-  width: 500px;
-  height: 210px;
+  min-width: calc(var(--opt-width) * 5);
+  height: auto;
+  padding: 0 5px 10px;
   background: var(--main-bg);
   color: var(--main-text);
   text-align: center;
@@ -21,7 +22,7 @@ body {
 }
 
 #desc {
-  margin: 0.75rem 0 1.75rem 0;
+  margin: 1.2rem 0 0.75rem 0;
   font-size: 1.5rem;
 }
 
@@ -70,7 +71,7 @@ body {
   background-size: 64px;
   background-position: 50% calc(50% - 1rem);
   color: var(--minor-text);
-  width: calc(64px + 1rem);
+  width: var(--opt-width);
   height: calc(64px + 1.5rem);
   transition:
     transform 0.3s ease-out,
@@ -101,7 +102,7 @@ img {
   width: auto;
 }
 
-form {margin-top: 0.25rem; color: var(--minor-text); 
+form {margin-top: 0.5rem; color: var(--minor-text); 
   font-size: 1rem;}
 form>div{display: inline-block;}
 input{display: none;}
@@ -114,9 +115,14 @@ input + label{
   transform: translateY(25%);
   color: #fff;
 }
-input:checked + label:after{
+input + label:after{
   content: '\2713';
   position: absolute;
   top: -0.15rem;
   left: 0.15rem;
+  transition: opacity 0.2s ease-out;
+  opacity: 0;
+}
+input:checked + label:after{
+  opacity: 1;
 }
