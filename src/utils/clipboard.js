@@ -11,7 +11,7 @@ const copyHandler = async (event) => {
   if (event.target.style.opacity == "0") {
     event.preventDefault();
     let val = event.target.innerText
-      .replace("x.com", fx ? "fxtwiiter.com" : "twitter.com")
+      .replace("x.com", fx ? "fxtwitter.com" : "twitter.com")
       .split(/\?\w+=/)[0];
     event.clipboardData.setData("text/plain", val);
   }
