@@ -22,5 +22,9 @@
     "notificationTweet":{
         "message": "Tweet",
         "description": "String to use to replace post in the notification timeline"
+    },
+    "fxDescription":{
+        "message": "Fxtwitter Links verwenden:",
+        "description": "Text t use to describe fxtwitter toggle"
     }
 }

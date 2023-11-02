@@ -179,7 +179,7 @@ export const main = async () => {
     .then((es) => (es[0].innerHTML = utils.logos[2]));
   //Get theme and run initial replacements
   utils.runtime
-    .themeGetter()
+    .storageGetter()
     .then((res) => {
       theme = res.theme;
     })

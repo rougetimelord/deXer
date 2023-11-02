@@ -11,7 +11,8 @@ Load as unpacked, good luck have fun.
 - Replaces page logo
 - Replaces menu logos
 - Blue/black/white themes
-- Intercepts copied links and replaces domain
+- Intercepts copied links and replaces when you copy links, replaces `x.com` with `twitter.com` and strips tracking query strings
+    - Optionally use [`fxtwitter.com`](https://github.com/FixTweet/FixTweet) as the domain instead
 - Replaces "repost" in retweet drop down
 - Replaces "posts" on profiles
 - Replaces "posts" on notifications page
