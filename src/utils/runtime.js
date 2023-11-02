@@ -15,7 +15,7 @@ export const i18nGetter = (name) => {
  * @param {Object<String, any>} search KVP of keys and default values
  * @returns {any} The value stored by the key
  */
-export const storageGetter = async (search={theme: 1}) => {
+export const storageGetter = async (search = { theme: 1 }) => {
   return browserRuntime.storage.sync.get(search);
 };
 
@@ -29,7 +29,7 @@ export const storageGetter = async (search={theme: 1}) => {
  * @param {StorageChangeCallback} callback Gets called with whatever changes.key is
  * @param {string} key
  */
-export const storageListener = async (callback, key="theme") => {
+export const storageListener = async (callback, key = "theme") => {
   browserRuntime.storage.sync.onChanged.addListener(async (changes) => {
     if (Object.keys(changes).includes(key)) {
       callback(changes[key].newValue);

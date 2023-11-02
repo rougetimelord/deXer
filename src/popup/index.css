@@ -7,7 +7,7 @@
   --main-text: #fff;
   --minor-text: #9a9a9a;
   --activity-shadow: rgba(29, 161, 242, 0.2);
-  --opt-width: calc(64px + 1rem)
+  --opt-width: calc(64px + 1rem);
 }
 
 body {
@@ -102,11 +102,18 @@ img {
   width: auto;
 }
 
-form {margin-top: 0.5rem; color: var(--minor-text); 
-  font-size: 1rem;}
-form>div{display: inline-block;}
-input{display: none;}
-input + label{
+form {
+  margin-top: 0.5rem;
+  color: var(--minor-text);
+  font-size: 1rem;
+}
+form > div {
+  display: inline-block;
+}
+input {
+  display: none;
+}
+input + label {
   display: inline-block;
   background-color: var(--check-bg);
   border-radius: 5px;
@@ -115,14 +122,14 @@ input + label{
   transform: translateY(25%);
   color: #fff;
 }
-input + label:after{
-  content: '\2713';
+input + label:after {
+  content: "\2713";
   position: absolute;
   top: -0.15rem;
   left: 0.15rem;
   transition: opacity 0.2s ease-out;
   opacity: 0;
 }
-input:checked + label:after{
+input:checked + label:after {
   opacity: 1;
 }
