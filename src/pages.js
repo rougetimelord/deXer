@@ -14,7 +14,7 @@ const newNotifications = async (mutations, observer, target, options) => {
     });
   });
   observer.observe(target, options);
-  console.debug("[Dexer] notification text(s) changed");
+  console.debug("[deXer] notification text(s) changed");
 };
 
 /**
@@ -48,7 +48,7 @@ export const timeline = async () => {
         if (!element.classList.contains("dxd")) {
           element.replaceText(/post/i, "tweet");
           element.classList.add("dxd");
-          console.debug("[Dexer] Changed social context text");
+          console.debug("[deXer] Changed social context text");
         }
       });
     },
@@ -69,7 +69,7 @@ export const profile = async () => {
       if (!es[0].classList.contains("dxd")) {
         es[0].replaceText(/Post/, "Tweet");
         es[0].classList.add("dxd");
-        console.debug("[Dexer] replaced posts text on profile");
+        console.debug("[deXer] replaced posts text on profile");
       }
     },
     { once: false },
