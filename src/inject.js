@@ -48,13 +48,16 @@ const iconReplace = async () => {
 const logoReplace = async () => {
   utils.mutation
     .resolveOnElement(
-      "a[href~='/i/verified-choose']>div>div>svg",
+      "a[href~='/home']>div>svg"
     )
     .then(es => {
       es[0].innerHTML =
         utils.logos[theme];})
     .then(() => 
-      utils.mutation.resolveOnElement("a[href~='/home']>div>svg"))
+      utils.mutation
+        .resolveOnElement(
+          "a[href~='/i/verified-choose']>div>div>svg"
+        ))
     .then(es => {
       es[0].innerHTML = 
         utils.logos[theme != 3 ? 2 : 3];})
