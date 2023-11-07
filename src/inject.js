@@ -47,22 +47,19 @@ const iconReplace = async () => {
  */
 const logoReplace = async () => {
   utils.mutation
-    .resolveOnElement(
-      "a[href~='/home']>div>svg"
+    .resolveOnElement("a[href~='/home']>div>svg")
+    .then((es) => {
+      es[0].innerHTML = utils.logos[theme];
+    })
+    .then(() =>
+      utils.mutation.resolveOnElement(
+        "a[href~='/i/verified-choose']>div>div>svg",
+      ),
     )
-    .then(es => {
-      es[0].innerHTML =
-        utils.logos[theme];})
-    .then(() => 
-      utils.mutation
-        .resolveOnElement(
-          "a[href~='/i/verified-choose']>div>div>svg"
-        ))
-    .then(es => {
-      es[0].innerHTML = 
-        utils.logos[theme != 3 ? 2 : 3];})
-    .then( () =>
-      console.debug("[deXer] logos replaced"))
+    .then((es) => {
+      es[0].innerHTML = utils.logos[theme != 3 ? 2 : 3];
+    })
+    .then(() => console.debug("[deXer] logos replaced"))
     .catch((err) => console.error(`[deXer] error in logoReplace`, err));
 };
 
@@ -118,10 +115,13 @@ const locationHandler = async (event) => {
     );
   }
 
-  while (
+  for (
+    let tries = 0;
+    tries < 10 &&
     state !== undefined &&
     "state" in state &&
-    location == state.state.previousPath
+    location == state.state.previousPath;
+    tries++
   ) {
     //This sucks!! :( don't know any better ways though
     await utils.delay(5);
