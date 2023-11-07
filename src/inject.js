@@ -118,10 +118,10 @@ const locationHandler = async (event) => {
     );
   }
 
-  while (
-    state !== undefined &&
+  for (let tries = 0;
+    tries < 10 && state !== undefined &&
     "state" in state &&
-    location == state.state.previousPath
+    location == state.state.previousPath; tries++
   ) {
     //This sucks!! :( don't know any better ways though
     await utils.delay(5);
