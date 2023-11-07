@@ -24,7 +24,6 @@ Load as unpacked, good luck have fun.
 - Footer copyright text removal
 - Replace text in settings menus
 - Log in/sign up page (least likely)
-- Add option to copy `fxtwitter` links
 - More shit???...
 
 ### Guidelines
