@@ -17,7 +17,10 @@ export const notificationTweet = i18nGetter("notificationTweet");
  * @param {number} ms
  * @returns A promise that resolves after a `ms` wait
  */
-export const delay = async (ms) => new Promise((res) => {setTimeout(res, ms)});
+export const delay = async (ms) =>
+  new Promise((res) => {
+    setTimeout(res, ms);
+  });
 
 /**
  * @type {Object} logos
