@@ -24,7 +24,7 @@ export const waitForElement = async (selectorList, callback, options = {}) => {
       return;
     }
   } catch (err) {
-    console.error(`[deXer] error in WFE pre-check:`, err, selectorList, target);
+    console.error(`[deXer] error in WFE pre-check:`, err, selectorList);
   }
   let observer = new MutationObserver(async (mutations, observer) => {
     const elements = document.querySelectorAll(selectorList);
