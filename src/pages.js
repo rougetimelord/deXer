@@ -1,4 +1,4 @@
-import * as helpers from "./utils/index.js";
+import * as utils from "./utils/index.js";
 
 /**
  * Replaces the word "post" in notifications as they load in
@@ -9,7 +9,7 @@ const newNotifications = async (mutations, observer, target, options) => {
   mutations.forEach(async (mutation) => {
     mutation.addedNodes.forEach(async (node) => {
       node.querySelectorAll("div>span>span").forEach(async (text) => {
-        text.replaceText(/post/i, helpers.notificationTweet);
+        text.replaceText(/post/i, utils.notificationTweet);
       });
     });
   });
@@ -22,14 +22,14 @@ const newNotifications = async (mutations, observer, target, options) => {
  * @returns {Promise<MutationObserver>}
  */
 export const notifications = async () => {
-  return helpers.mutation
+  return utils.mutation
     .resolveOnElement("div[tabindex='0']>div>section>div")
     .then((es) => es[0])
     .then((timeline) => {
       timeline
         .querySelectorAll("div>span>span")
-        .forEach((e) => e.replaceText(/post/i, helpers.notificationTweet));
-      return helpers.mutation.watchElement(timeline, newNotifications, {
+        .forEach((e) => e.replaceText(/post/i, utils.notificationTweet));
+      return utils.mutation.watchElement(timeline, newNotifications, {
         childList: true,
         subtree: true,
       });
@@ -41,8 +41,19 @@ export const notifications = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const timeline = async () => {
-  return helpers.mutation.waitForElement(
-    "span[data-testid='socialContext'],div[style]>div>div[role]>div>div>span",
+  let orig, 
+    showPosts = await utils.mutation.waitForElement(
+      "div[role='button']>div>div:nth-child(1)>span", 
+      async es => {
+        if(!es[0].classList.contains("dxd")){
+          es[0].replaceText(/post/i, "tweet");
+          es[0].classList.add("dxd");
+          console.debug("[deXer] Changed show more posts ribbon");
+        }
+      },
+      {once: false});
+  return utils.mutation.waitForElement(
+    "span[data-testid='socialContext']",
     async (es) => {
       es.forEach(async (element) => {
         if (!element.classList.contains("dxd")) {
@@ -53,7 +64,15 @@ export const timeline = async () => {
       });
     },
     { once: false },
-  );
+  )
+  .then(obs => {
+    orig = obs.disconnect;
+    obs.disconnect = () => {
+      showPosts.disconnect();
+      orig();
+    }
+    return obs;
+  });
 };
 
 /**
@@ -61,7 +80,7 @@ export const timeline = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const profile = async () => {
-  return helpers.mutation.waitForElement(
+  return utils.mutation.waitForElement(
     `a[href='/${
       window.location.pathname.split("/")[1]
     }'][role='tab']>div>div>span`,
