@@ -41,38 +41,40 @@ export const notifications = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const timeline = async () => {
-  let orig, 
+  let orig,
     showPosts = await utils.mutation.waitForElement(
-      "div[role='button']>div>div:nth-child(1)>span", 
-      async es => {
-        if(!es[0].classList.contains("dxd")){
+      "div[role='button']>div>div:nth-child(1)>span",
+      async (es) => {
+        if (!es[0].classList.contains("dxd")) {
           es[0].replaceText(/post/i, "tweet");
           es[0].classList.add("dxd");
           console.debug("[deXer] Changed show more posts ribbon");
         }
       },
-      {once: false});
-  return utils.mutation.waitForElement(
-    "span[data-testid='socialContext']",
-    async (es) => {
-      es.forEach(async (element) => {
-        if (!element.classList.contains("dxd")) {
-          element.replaceText(/post/i, "tweet");
-          element.classList.add("dxd");
-          console.debug("[deXer] Changed social context text");
-        }
-      });
-    },
-    { once: false },
-  )
-  .then(obs => {
-    orig = obs.disconnect;
-    obs.disconnect = () => {
-      showPosts.disconnect();
-      orig();
-    }
-    return obs;
-  });
+      { once: false },
+    );
+  return utils.mutation
+    .waitForElement(
+      "span[data-testid='socialContext']",
+      async (es) => {
+        es.forEach(async (element) => {
+          if (!element.classList.contains("dxd")) {
+            element.replaceText(/post/i, "tweet");
+            element.classList.add("dxd");
+            console.debug("[deXer] Changed social context text");
+          }
+        });
+      },
+      { once: false },
+    )
+    .then((obs) => {
+      orig = obs.disconnect;
+      obs.disconnect = () => {
+        showPosts.disconnect();
+        orig();
+      };
+      return obs;
+    });
 };
 
 /**
