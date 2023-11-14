@@ -42,6 +42,19 @@ const iconReplace = async () => {
   console.debug("[deXer] icon replaced");
 };
 
+const sidebarButton = async () => {
+  utils.mutation.resolveOnElement("a[href='/compose/tweet']", 0)
+  .then(es => {
+    es[0].deepestChild().replaceText(/Post/i, "Tweet");
+    console.debug("[deXer] Sidebar button replaced")
+  })
+  .catch(err => {
+    if(err.message != "timeout"){
+      console.error("[deXer] Error in sidebarButton:", err)
+    }
+  })
+}
+
 /**
  * Replaces logos on page
  */
@@ -95,6 +108,16 @@ const retweetMenuStart = async () => {
     );
 };
 
+const toolTip = async () => {
+  utils.mutation.waitForElement("div[role='tooltip']", es => {
+    let e = es[0].deepestChild();
+    if(!e.classList.contains("dxd")) {
+      e.replaceText(/Post/i, "Tweet");
+      e.classList.add("dxd");
+    }
+  }, {once: false})
+}
+
 /**
  * Fires functions that depend on what the current page is
  *
@@ -113,8 +136,8 @@ const locationHandler = async (event) => {
     "state" in state &&
     state.state.previousPath == "/i/communitynotes"
   ) {
-    logoReplace().then(() =>
-      console.debug("[deXer] left community notes, logo replaced"),
+    Promise.all([logoReplace(), sidebarButton()]).then(() =>
+      console.debug("[deXer] Left community notes, sidebar rerun"),
     );
   }
 
@@ -188,7 +211,7 @@ export const main = async () => {
     .then((res) => {
       theme = res.theme;
     })
-    .then(() => Promise.all([logoReplace(), iconReplace()]))
+    .then(() => Promise.all([logoReplace(), iconReplace(), sidebarButton()]))
     .then(() =>
       console.debug("[deXer] first logo and icon replacement executed"),
     )
@@ -202,6 +225,7 @@ export const main = async () => {
   });
   //Start hunting for retweet dropdowns
   retweetMenuStart();
+  toolTip();
   //Add title element and watch it
   const createTitle = async () => document.createElement("title");
   createTitle().then((e) => {
