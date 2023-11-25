@@ -46,17 +46,18 @@ const iconReplace = async () => {
  * Replaces sidebar tweet button
  */
 const sidebarButton = async () => {
-  utils.mutation.resolveOnElement("a[href='/compose/tweet']", 0)
-  .then(es => {
-    es[0].deepestChild().replaceText(/Post/i, "Tweet");
-    console.debug("[deXer] Sidebar button replaced")
-  })
-  .catch(err => {
-    if(err.message != "timeout"){
-      console.error("[deXer] Error in sidebarButton:", err)
-    }
-  })
-}
+  utils.mutation
+    .resolveOnElement("a[href='/compose/tweet']", 0)
+    .then((es) => {
+      es[0].deepestChild().replaceText(/Post/i, "Tweet");
+      console.debug("[deXer] Sidebar button replaced");
+    })
+    .catch((err) => {
+      if (err.message != "timeout") {
+        console.error("[deXer] Error in sidebarButton:", err);
+      }
+    });
+};
 
 /**
  * Replaces logos on page
@@ -115,14 +116,18 @@ const retweetMenuStart = async () => {
  * Replaces the text in tooltips
  */
 const toolTip = async () => {
-  utils.mutation.waitForElement("div[role='tooltip']", es => {
-    let e = es[0].deepestChild();
-    if(!e.classList.contains("dxd")) {
-      e.replaceText(/Post/i, "Tweet");
-      e.classList.add("dxd");
-    }
-  }, {once: false})
-}
+  utils.mutation.waitForElement(
+    "div[role='tooltip']",
+    (es) => {
+      let e = es[0].deepestChild();
+      if (!e.classList.contains("dxd")) {
+        e.replaceText(/Post/i, "Tweet");
+        e.classList.add("dxd");
+      }
+    },
+    { once: false },
+  );
+};
 
 /**
  * Fires functions that depend on what the current page is
@@ -140,13 +145,10 @@ const locationHandler = async (event) => {
   if (
     state !== undefined &&
     "state" in state &&
-    ( state.state.previousPath == "/i/communitynotes" ||
-    state.state.previousPath.match("/i/birdwatch") )
+    (state.state.previousPath == "/i/communitynotes" ||
+      state.state.previousPath.match("/i/birdwatch"))
   ) {
-    Promise.all([
-      logoReplace(),
-      sidebarButton()
-    ]).then(() =>
+    Promise.all([logoReplace(), sidebarButton()]).then(() =>
       console.debug("[deXer] Left community notes, sidebar rerun"),
     );
   }

@@ -87,7 +87,7 @@ export const watchElement = async (
  * @param {Number} timeout
  * @returns {Promise<NodeListOf<Element>>}
  */
-export const resolveOnElement = async (selectorList, timeout=0) => {
+export const resolveOnElement = async (selectorList, timeout = 0) => {
   return new Promise((resolve, reject) => {
     try {
       const es0 = document.querySelectorAll(selectorList);
@@ -116,7 +116,7 @@ export const resolveOnElement = async (selectorList, timeout=0) => {
         delay(timeout).then(() => {
           observer.disconnect();
           reject(new Error("timeout"));
-        })
+        });
       }
     } catch (err) {
       console.error(`[deXer] error in ROE:`, err, selectorList, target);
