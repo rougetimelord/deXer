@@ -47,7 +47,7 @@ const iconReplace = async () => {
  */
 const sidebarButton = async () => {
   utils.mutation
-    .resolveOnElement("a[href='/compose/tweet']", 0)
+    .resolveOnElement("a[href='/compose/tweet']", 1000)
     .then((es) => {
       es[0].deepestChild().replaceText(/Post/i, "Tweet");
       console.debug("[deXer] Sidebar button replaced");
