@@ -140,9 +140,13 @@ const locationHandler = async (event) => {
   if (
     state !== undefined &&
     "state" in state &&
-    state.state.previousPath == "/i/communitynotes"
+    ( state.state.previousPath == "/i/communitynotes" ||
+    state.state.previousPath.match("/i/birdwatch") )
   ) {
-    Promise.all([logoReplace(), sidebarButton()]).then(() =>
+    Promise.all([
+      logoReplace(),
+      sidebarButton()
+    ]).then(() =>
       console.debug("[deXer] Left community notes, sidebar rerun"),
     );
   }
