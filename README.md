@@ -19,6 +19,7 @@ Load as unpacked, good luck have fun.
 - Replaces "reposted by" above tweets in the home and notifications timelines
 - Replaces "post" in the tweet button on home screen
 - Replaces "Show `x` posts" banner at the top of timelines
+- Tweaks sidebar tweet button
 
 ### Features for later??? Maybe??
 - Footer copyright text removal

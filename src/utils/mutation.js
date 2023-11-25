@@ -5,6 +5,9 @@
  * @param {NodeListOf<Element>} elements
  * @param {MutationObserver} observer
  */
+
+import { delay } from "./index.js";
+
 /**
  * Creates a mutation listener that waits for all elements in the selector list to exist
  *
@@ -81,9 +84,10 @@ export const watchElement = async (
  *
  * Can not be used to fire functions multiple times, resolves once and is done.
  * @param {string} selectorList
+ * @param {Number} timeout
  * @returns {Promise<NodeListOf<Element>>}
  */
-export const resolveOnElement = async (selectorList) => {
+export const resolveOnElement = async (selectorList, timeout = 0) => {
   return new Promise((resolve, reject) => {
     try {
       const es0 = document.querySelectorAll(selectorList);
@@ -108,6 +112,12 @@ export const resolveOnElement = async (selectorList) => {
     });
     try {
       observer.observe(document, { subtree: true, childList: true });
+      if (timeout > 0) {
+        delay(timeout).then(() => {
+          observer.disconnect();
+          reject(new Error("timeout"));
+        });
+      }
     } catch (err) {
       console.error(`[deXer] error in ROE:`, err, selectorList, target);
       reject(err);
