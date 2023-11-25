@@ -42,6 +42,9 @@ const iconReplace = async () => {
   console.debug("[deXer] icon replaced");
 };
 
+/**
+ * Replaces sidebar tweet button
+ */
 const sidebarButton = async () => {
   utils.mutation.resolveOnElement("a[href='/compose/tweet']", 0)
   .then(es => {
@@ -108,6 +111,9 @@ const retweetMenuStart = async () => {
     );
 };
 
+/**
+ * Replaces the text in tooltips
+ */
 const toolTip = async () => {
   utils.mutation.waitForElement("div[role='tooltip']", es => {
     let e = es[0].deepestChild();
