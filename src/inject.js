@@ -135,17 +135,11 @@ const toolTip = async () => {
  */
 const locationHandler = async (event) => {
   const state =
-    event.state != undefined
-      ? event.state
-      : event.detail != undefined
-      ? event.detail.state
-      : undefined;
+    (event?.detail?.state || event?.state)?.state;
   let location = window.location.pathname;
   if (
-    state !== undefined &&
-    "state" in state &&
-    (state.state.previousPath == "/i/communitynotes" ||
-      state.state.previousPath.match("/i/birdwatch"))
+    state?.previousPath.match("/i/communitynotes") ||
+    state?.previousPath.match("/i/birdwatch")
   ) {
     Promise.all([logoReplace(), sidebarButton()]).then(() =>
       console.debug("[deXer] Left community notes, sidebar rerun"),
@@ -153,16 +147,15 @@ const locationHandler = async (event) => {
   }
 
   for (let tries = 0;
-    tries < 10 && state !== undefined &&
-    "state" in state &&
-    location == state.state.previousPath; tries++
+    tries < 10 &&
+    location == state?.previousPath; tries++
   ) {
     //This sucks!! :( don't know any better ways though
     await utils.delay(5);
     location = window.location.pathname;
   }
   try {
-    observers.forEach((obs) => obs.disconnect());
+    observers.forEach((obs) => obs?.disconnect());
   } catch {
   } finally {
     observers = [];
