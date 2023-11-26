@@ -76,8 +76,7 @@ const logoReplace = async () => {
           "a[href~='/i/verified-choose']>div>div>svg"
         ))
     .then(es => {
-      es[0].innerHTML = 
-        utils.logos[theme != 3 ? 2 : 3];})
+      es[0].innerHTML = (utils.logos[theme != 3 ? 2 : 3]).replace("fill","fill:none;stroke-width:1.25rem;stroke-linejoin:round;stroke");})
     .then( () =>
       console.debug("[deXer] logos replaced"))
     .catch((err) => console.error(`[deXer] error in logoReplace`, err));
