@@ -136,8 +136,8 @@ const locationHandler = async (event) => {
     event.state != undefined
       ? event.state
       : event.detail != undefined
-      ? event.detail.state
-      : undefined;
+        ? event.detail.state
+        : undefined;
   let location = window.location.pathname;
   if (
     state !== undefined &&
