@@ -23,7 +23,7 @@
     ) {}
     return e;
   };
-  import((!!chrome ? chrome : browser).runtime.getURL("/src/inject.js"))
+  import((!!chrome ? chrome : browser).runtime.getURL("./src/inject.js"))
     .then((injectModule) => injectModule.main())
     .catch((err) => console.error("[deXer] Error in injection", err));
 })();
