@@ -51,7 +51,7 @@ export const timeline = async () => {
           console.debug("[deXer] Changed show more posts ribbon");
         }
       },
-      { once: false },
+      { once: false, target: document },
     );
   return utils.mutation
     .waitForElement(
