@@ -42,7 +42,7 @@ export const waitForElement = async (selectorList, callback, options = {}) => {
     observer.observe(options.target, { subtree: true, childList: true });
     return observer;
   } catch (err) {
-    console.error(`[deXer] error in WFE:`, err, selectorList, target);
+    console.error(`[deXer] error in WFE:`, err, selectorList, options.target);
   }
 };
 

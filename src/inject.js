@@ -7,7 +7,7 @@ let theme = 1,
 //Watch for theme changes, and rerun replacements
 utils.runtime.storageListener(async (newTheme) => {
   theme = newTheme;
-  Promise.all([logoReplace(), iconReplace()])
+  Promise.all([sidebarMods(), iconReplace()])
     .then(() => {
       console.debug(`[deXer] updated to theme: ${theme}`);
     })
@@ -62,22 +62,19 @@ const sidebarButton = async () => {
 /**
  * Replaces logos on page
  */
-const logoReplace = async () => {
+const sidebarMods = async () => {
   utils.mutation
     .resolveOnElement("a[href~='/home']>div>svg")
     .then((es) => {
       es[0].innerHTML = utils.logos[theme];
+      console.debug("[deXer] logos replaced");
     })
-    .then(() =>
-      utils.mutation.resolveOnElement(
-        "a[href~='/i/verified-choose']>div>div>svg",
-      ),
-    )
+    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok']"))
     .then((es) => {
-      es[0].innerHTML = utils.logos[theme != 3 ? 2 : 3];
+      es[0].parentElement.removeChild(es[0]);
+      console.debug("[deXer] Grok removed");
     })
-    .then(() => console.debug("[deXer] logos replaced"))
-    .catch((err) => console.error(`[deXer] error in logoReplace`, err));
+    .catch((err) => console.error(`[deXer] error in sidebarMods`, err));
 };
 
 /**
@@ -122,7 +119,7 @@ const toolTip = async () => {
         e.classList.add("dxd");
       }
     },
-    { once: false },
+    { once: false, target: document },
   );
 };
 
@@ -145,7 +142,7 @@ const locationHandler = async (event) => {
     (state.state.previousPath == "/i/communitynotes" ||
       state.state.previousPath.match("/i/birdwatch"))
   ) {
-    Promise.all([logoReplace(), sidebarButton()]).then(() =>
+    Promise.all([sidebarMods(), sidebarButton()]).then(() =>
       console.debug("[deXer] Left community notes, sidebar rerun"),
     );
   }
@@ -223,7 +220,7 @@ export const main = async () => {
     .then((res) => {
       theme = res.theme;
     })
-    .then(() => Promise.all([logoReplace(), iconReplace(), sidebarButton()]))
+    .then(() => Promise.all([sidebarMods(), iconReplace(), sidebarButton()]))
     .then(() =>
       console.debug("[deXer] first logo and icon replacement executed"),
     )
