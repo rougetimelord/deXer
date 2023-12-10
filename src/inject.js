@@ -72,7 +72,7 @@ const sidebarMods = async () => {
     .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok']"))
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
-      console.debug("[deXer] Grok removed")
+      console.debug("[deXer] Grok removed");
     })
     .catch((err) => console.error(`[deXer] error in sidebarMods`, err));
 };
