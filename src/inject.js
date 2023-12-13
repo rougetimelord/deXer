@@ -69,9 +69,10 @@ const sidebarMods = async () => {
       es[0].innerHTML = utils.logos[theme];
       console.debug("[deXer] logos replaced");
     })
-    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok'],a[href~='/i/verified-choose']"))
+    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok'], a[href~='/i/verified-choose']"))
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
+      es[1].parentElement.removeChild(es[1]);
       console.debug("[deXer] Grok removed")
     })
     .catch((err) => console.error(`[deXer] error in sidebarMods`, err));
