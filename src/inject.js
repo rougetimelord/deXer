@@ -69,7 +69,7 @@ const sidebarMods = async () => {
       es[0].innerHTML = utils.logos[theme];
       console.debug("[deXer] logos replaced");
     })
-    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok']"))
+    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok'],a[href~='/i/verified-choose']"))
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
       console.debug("[deXer] Grok removed")
