@@ -202,6 +202,12 @@ const locationHandler = async (event) => {
       utils.mutation
         .resolveOnElement("div[data-testid='tweetButtonInline']")
         .then((es) => es[0].replaceText("Post", "Tweet"));
+      utils.mutation
+        .resolveOnElement("div[tabindex]>div>div>aside", 1000)
+        .then((es) => {
+          const e = es[0].parentElement;
+          e.parentElement.removeChild(e)
+        })
     }
     return;
   }
