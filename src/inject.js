@@ -73,7 +73,7 @@ const sidebarMods = async () => {
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
       es[1].parentElement.removeChild(es[1]);
-      console.debug("[deXer] Grok removed")
+      console.debug("[deXer] Grok and premeium removed");
     })
     .catch((err) => console.error(`[deXer] error in sidebarMods`, err));
 };
