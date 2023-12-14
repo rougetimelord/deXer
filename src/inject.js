@@ -69,7 +69,11 @@ const sidebarMods = async () => {
       es[0].innerHTML = utils.logos[theme];
       console.debug("[deXer] logos replaced");
     })
-    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok'], a[href~='/i/verified-choose']"))
+    .then(() =>
+      utils.mutation.resolveOnElement(
+        "a[href~='/i/grok'], a[href~='/i/verified-choose']",
+      ),
+    )
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
       es[1].parentElement.removeChild(es[1]);
@@ -171,7 +175,7 @@ const locationHandler = async (event) => {
     utils.mutation
       .resolveOnElement("div:nth-child(2)>div>h2>span")
       .then((es) => {
-        es[0].replaceText("Post", "Tweet")
+        es[0].replaceText("Post", "Tweet");
       })
       .then(() => console.debug("[deXer] Header text updated"));
   }
