@@ -16,18 +16,20 @@ import { delay } from "./index.js";
  * @param {WaitForElementsOpts} options
  * @param {Node | undefined} [options.target = document.body]
  * @param {boolean | undefined} [options.once = true]
- * @returns {MutationObserver}
+ * @returns {MutationObserver | undefined}
  */
 export const waitForElement = async (selectorList, callback, options = {}) => {
   options = { ...{ target: document, once: true }, ...options };
-  try {
-    const es0 = document.querySelectorAll(selectorList);
-    if (es0.length >= selectorList.split(/,\s*/).length) {
-      callback(es0, null);
-      return;
+  if (options.once) {
+    try {
+      const es0 = document.querySelectorAll(selectorList);
+      if (es0.length >= selectorList.split(/,\s*/).length) {
+        callback(es0, null);
+        return;
+      }
+    } catch (err) {
+      console.error(`[deXer] error in WFE pre-check:`, err, selectorList);
     }
-  } catch (err) {
-    console.error(`[deXer] error in WFE pre-check:`, err, selectorList);
   }
   let observer = new MutationObserver(async (mutations, observer) => {
     const elements = document.querySelectorAll(selectorList);
