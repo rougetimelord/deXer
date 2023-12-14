@@ -2,6 +2,7 @@
   /**
    * Replaces the inner text of an HTMLElement
    *
+   * @memberof HTMLElement.prototype
    * @param {string | RegExp} searchValue The value to search for
    * @param {string} replaceValue The value to replace with
    */
@@ -12,6 +13,7 @@
    * Finds the deepest child of an element
    *
    * Only traverses first children so no guarantees that it will be the deepest child overall.
+   * @memberof HTMLElement.prototype
    * @returns {HTMLElement}
    */
   HTMLElement.prototype.deepestChild = function () {

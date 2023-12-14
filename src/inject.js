@@ -169,8 +169,10 @@ const locationHandler = async (event) => {
 
   if (location.match(/(\/i\/timeline)|(\/status\/)/)) {
     utils.mutation
-      .resolveOnElement("h2>span")
-      .then((es) => es[0].replaceText("Post", "Tweet"))
+      .resolveOnElement("div:nth-child(2)>div>h2>span")
+      .then((es) => {
+        es[0].replaceText("Post", "Tweet")
+      })
       .then(() => console.debug("[deXer] Header text updated"));
   }
 
