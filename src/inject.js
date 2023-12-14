@@ -69,10 +69,15 @@ const sidebarMods = async () => {
       es[0].innerHTML = utils.logos[theme];
       console.debug("[deXer] logos replaced");
     })
-    .then(() => utils.mutation.resolveOnElement("a[href~='/i/grok']"))
+    .then(() =>
+      utils.mutation.resolveOnElement(
+        "a[href~='/i/grok'], a[href~='/i/verified-choose']",
+      ),
+    )
     .then((es) => {
       es[0].parentElement.removeChild(es[0]);
-      console.debug("[deXer] Grok removed");
+      es[1].parentElement.removeChild(es[1]);
+      console.debug("[deXer] Grok and premeium removed");
     })
     .catch((err) => console.error(`[deXer] error in sidebarMods`, err));
 };
@@ -168,8 +173,10 @@ const locationHandler = async (event) => {
 
   if (location.match(/(\/i\/timeline)|(\/status\/)/)) {
     utils.mutation
-      .resolveOnElement("h2>span")
-      .then((es) => es[0].replaceText("Post", "Tweet"))
+      .resolveOnElement("div:nth-child(2)>div>h2>span")
+      .then((es) => {
+        es[0].replaceText("Post", "Tweet");
+      })
       .then(() => console.debug("[deXer] Header text updated"));
   }
 
