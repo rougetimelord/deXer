@@ -202,7 +202,7 @@ const locationHandler = async (event) => {
 /**
  * Main function
  */
-export const main = async () => {
+const main = async () => {
   //Add copy event listener
   utils.clipboard();
   // //Replace placeholder logo
@@ -238,3 +238,32 @@ export const main = async () => {
     utils.mutation.watchElement(e, titleReplace);
   });
 };
+
+
+(async () => {
+  /**
+   * Replaces the inner text of an HTMLElement
+   *
+   * @param {string | RegExp} searchValue The value to search for
+   * @param {string} replaceValue The value to replace with
+   */
+  HTMLElement.prototype.replaceText = function (searchValue, replaceValue) {
+    this.innerHTML = this.innerHTML.replace(searchValue, replaceValue);
+  };
+  /**
+   * Finds the deepest child of an element
+   *
+   * Only traverses first children so no guarantees that it will be the deepest child overall.
+   * @returns {HTMLElement}
+   */
+  HTMLElement.prototype.deepestChild = function () {
+    let e = this;
+    for (
+      ;
+      e.hasChildNodes() && e.firstChild instanceof HTMLElement;
+      e = e.firstChild
+    ) {}
+    return e;
+  };
+  main();
+})()
