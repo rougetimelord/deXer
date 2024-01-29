@@ -19,7 +19,7 @@ import { delay } from "./index.js";
  * @returns {MutationObserver}
  */
 export const waitForElement = async (selectorList, callback, options = {}) => {
-  options = { ...{ target: document.body, once: true }, ...options };
+  options = { ...{ target: document, once: true }, ...options };
   try {
     const es0 = document.querySelectorAll(selectorList);
     if (es0.length >= selectorList.split(/,\s*/).length) {
