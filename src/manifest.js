@@ -18,7 +18,7 @@ export default defineManifest({
     },
     web_accessible_resources: [
         {
-            resources: ["assets/*.png"],
+            resources: ["assets/*.png", "src/utils/historyOverwrite.js"],
             matches: ["*://twitter.com/*", "*://x.com/*"]
         }
     ],
