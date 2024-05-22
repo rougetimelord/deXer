@@ -1,135 +1,135 @@
 :root {
-  --main-bg: #2d2d2d;
-  --sel-bg: #3a3a3a;
-  --check-bg: #5b5b5b;
-  --hover-bg: rgba(255, 255, 255, 0.15);
-  --active-bg: rgba(255, 255, 255, 0.2);
-  --main-text: #fff;
-  --minor-text: #9a9a9a;
-  --activity-shadow: rgba(29, 161, 242, 0.2);
-  --opt-width: calc(64px + 1rem);
+    --main-bg: #2d2d2d;
+    --sel-bg: #3a3a3a;
+    --check-bg: #5b5b5b;
+    --hover-bg: rgba(255, 255, 255, 0.15);
+    --active-bg: rgba(255, 255, 255, 0.2);
+    --main-text: #fff;
+    --minor-text: #9a9a9a;
+    --activity-shadow: rgba(29, 161, 242, 0.2);
+    --opt-width: calc(64px + 1rem);
 }
 
 body {
-  min-width: calc(var(--opt-width) * 5);
-  height: auto;
-  padding: 0 5px 10px;
-  background: var(--main-bg);
-  color: var(--main-text);
-  text-align: center;
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+    min-width: calc(var(--opt-width) * 5);
+    height: auto;
+    padding: 0 5px 10px;
+    background: var(--main-bg);
+    color: var(--main-text);
+    text-align: center;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #desc {
-  margin: 1.2rem 0 0.75rem 0;
-  font-size: 1.5rem;
+    margin: 1.2rem 0 0.75rem 0;
+    font-size: 1.5rem;
 }
 
 #flex {
-  display: flex;
-  justify-content: space-evenly;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .opt.sel {
-  background-color: var(--sel-bg);
-  box-shadow: 2px 2px 5px #000;
+    background-color: var(--sel-bg);
+    box-shadow: 2px 2px 5px #000;
 }
 
 #opt1 {
-  background-image: url(/assets/logo1.png);
+    background-image: url(/assets/logo1.png);
 }
 
 #opt1::after {
-  content: "__MSG_blue__";
-  position: relative;
-  top: calc(64px + 0.25rem);
+    content: '__MSG_blue__';
+    position: relative;
+    top: calc(64px + 0.25rem);
 }
 
 #opt2 {
-  background-image: url(/assets/logo2.png);
+    background-image: url(/assets/logo2.png);
 }
 
 #opt2::after {
-  content: "__MSG_black__";
-  position: relative;
-  top: calc(64px + 0.25rem);
+    content: '__MSG_black__';
+    position: relative;
+    top: calc(64px + 0.25rem);
 }
 
 #opt3 {
-  background-image: url(/assets/logo3.png);
+    background-image: url(/assets/logo3.png);
 }
 
 #opt3::after {
-  content: "__MSG_white__";
-  position: relative;
-  top: calc(64px + 0.25rem);
+    content: '__MSG_white__';
+    position: relative;
+    top: calc(64px + 0.25rem);
 }
 
 .opt {
-  background-repeat: no-repeat;
-  background-size: 64px;
-  background-position: 50% calc(50% - 1rem);
-  color: var(--minor-text);
-  width: var(--opt-width);
-  height: calc(64px + 1.5rem);
-  transition:
-    transform 0.3s ease-out,
-    background 0.15s ease-in,
-    box-shadow 0.2s ease-out;
-  padding: 10px;
-  border-radius: 10px;
+    background-repeat: no-repeat;
+    background-size: 64px;
+    background-position: 50% calc(50% - 1rem);
+    color: var(--minor-text);
+    width: var(--opt-width);
+    height: calc(64px + 1.5rem);
+    transition:
+        transform 0.3s ease-out,
+        background 0.15s ease-in,
+        box-shadow 0.2s ease-out;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .opt:hover {
-  transform: scale(1.1);
-  background-color: var(--hover-bg);
-  box-shadow: 2px 2px 5px var(--activity-shadow);
+    transform: scale(1.1);
+    background-color: var(--hover-bg);
+    box-shadow: 2px 2px 5px var(--activity-shadow);
 }
 
 .opt:active {
-  transition:
-    transform 0.05s ease-out,
-    background 0.05s ease-in,
-    box-shadow 0.02s ease-out;
-  transform: scale(1.13);
-  background-color: var(--active-bg);
-  box-shadow: 2px 2px 5px 3px var(--activity-shadow);
+    transition:
+        transform 0.05s ease-out,
+        background 0.05s ease-in,
+        box-shadow 0.02s ease-out;
+    transform: scale(1.13);
+    background-color: var(--active-bg);
+    box-shadow: 2px 2px 5px 3px var(--activity-shadow);
 }
 
 img {
-  height: 64px;
-  width: auto;
+    height: 64px;
+    width: auto;
 }
 
 form {
-  margin-top: 0.5rem;
-  color: var(--minor-text);
-  font-size: 1rem;
+    margin-top: 0.5rem;
+    color: var(--minor-text);
+    font-size: 1rem;
 }
 form > div {
-  display: inline-block;
+    display: inline-block;
 }
 input {
-  display: none;
+    display: none;
 }
 input + label {
-  display: inline-block;
-  background-color: var(--check-bg);
-  border-radius: 5px;
-  height: 1.1rem;
-  width: 1.1rem;
-  transform: translateY(25%);
-  color: #fff;
+    display: inline-block;
+    background-color: var(--check-bg);
+    border-radius: 5px;
+    height: 1.1rem;
+    width: 1.1rem;
+    transform: translateY(25%);
+    color: #fff;
 }
 input + label:after {
-  content: "\2713";
-  position: absolute;
-  top: -0.15rem;
-  left: 0.15rem;
-  transition: opacity 0.2s ease-out;
-  opacity: 0;
+    content: '\2713';
+    position: absolute;
+    top: -0.15rem;
+    left: 0.15rem;
+    transition: opacity 0.2s ease-out;
+    opacity: 0;
 }
 input:checked + label:after {
-  opacity: 1;
+    opacity: 1;
 }

@@ -6,7 +6,7 @@
  * @param {MutationObserver} observer
  */
 
-import { delay } from "./index.js";
+import {delay} from './index.js';
 
 /**
  * Creates a mutation listener that waits for all elements in the selector list to exist
@@ -19,31 +19,36 @@ import { delay } from "./index.js";
  * @returns {MutationObserver}
  */
 export const waitForElement = async (selectorList, callback, options = {}) => {
-  options = { ...{ target: document, once: true }, ...options };
-  try {
-    const es0 = document.querySelectorAll(selectorList);
-    if (es0.length >= selectorList.split(/,\s*/).length) {
-      callback(es0, null);
-      return;
+    options = {...{target: document, once: true}, ...options};
+    try {
+        const es0 = document.querySelectorAll(selectorList);
+        if (es0.length >= selectorList.split(/,\s*/).length) {
+            callback(es0, null);
+            return;
+        }
+    } catch (err) {
+        console.error(`[deXer] error in WFE pre-check:`, err, selectorList);
     }
-  } catch (err) {
-    console.error(`[deXer] error in WFE pre-check:`, err, selectorList);
-  }
-  let observer = new MutationObserver(async (mutations, observer) => {
-    const elements = document.querySelectorAll(selectorList);
-    if (elements.length >= selectorList.split(/,\s*/).length) {
-      callback(elements, observer);
-      if (options.once) {
-        observer.disconnect();
-      }
+    let observer = new MutationObserver(async (mutations, observer) => {
+        const elements = document.querySelectorAll(selectorList);
+        if (elements.length >= selectorList.split(/,\s*/).length) {
+            callback(elements, observer);
+            if (options.once) {
+                observer.disconnect();
+            }
+        }
+    });
+    try {
+        observer.observe(options.target, {subtree: true, childList: true});
+        return observer;
+    } catch (err) {
+        console.error(
+            `[deXer] error in WFE:`,
+            err,
+            selectorList,
+            options.target,
+        );
     }
-  });
-  try {
-    observer.observe(options.target, { subtree: true, childList: true });
-    return observer;
-  } catch (err) {
-    console.error(`[deXer] error in WFE:`, err, selectorList, options.target);
-  }
 };
 
 /**
@@ -64,19 +69,19 @@ export const waitForElement = async (selectorList, callback, options = {}) => {
  * @returns {MutationObserver}
  */
 export const watchElement = async (
-  target,
-  callback,
-  options = { childList: true },
+    target,
+    callback,
+    options = {childList: true},
 ) => {
-  try {
-    let observer = new MutationObserver((mutations, observer) => {
-      callback(mutations, observer, target, options);
-    });
-    observer.observe(target, options);
-    return observer;
-  } catch (err) {
-    console.error(`[deXer] error in WE: ${err}`, target, callback.name);
-  }
+    try {
+        let observer = new MutationObserver((mutations, observer) => {
+            callback(mutations, observer, target, options);
+        });
+        observer.observe(target, options);
+        return observer;
+    } catch (err) {
+        console.error(`[deXer] error in WE: ${err}`, target, callback.name);
+    }
 };
 
 /**
@@ -88,39 +93,39 @@ export const watchElement = async (
  * @returns {Promise<NodeListOf<Element>>}
  */
 export const resolveOnElement = async (selectorList, timeout = 0) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const es0 = document.querySelectorAll(selectorList);
-      if (es0.length >= selectorList.split(/,\s*/).length) {
-        resolve(es0);
-      }
-    } catch (err) {
-      console.error(
-        `[deXer] error in ROE pre-check:`,
-        err,
-        selectorList,
-        target,
-      );
-      reject(err);
-    }
-    let observer = new MutationObserver(async (mutations, observer) => {
-      const elements = document.querySelectorAll(selectorList);
-      if (elements.length >= selectorList.split(/,\s*/).length) {
-        resolve(elements);
-        observer.disconnect();
-      }
-    });
-    try {
-      observer.observe(document, { subtree: true, childList: true });
-      if (timeout > 0) {
-        delay(timeout).then(() => {
-          observer.disconnect();
-          reject(new Error("timeout"));
+    return new Promise((resolve, reject) => {
+        try {
+            const es0 = document.querySelectorAll(selectorList);
+            if (es0.length >= selectorList.split(/,\s*/).length) {
+                resolve(es0);
+            }
+        } catch (err) {
+            console.error(
+                `[deXer] error in ROE pre-check:`,
+                err,
+                selectorList,
+                target,
+            );
+            reject(err);
+        }
+        let observer = new MutationObserver(async (mutations, observer) => {
+            const elements = document.querySelectorAll(selectorList);
+            if (elements.length >= selectorList.split(/,\s*/).length) {
+                resolve(elements);
+                observer.disconnect();
+            }
         });
-      }
-    } catch (err) {
-      console.error(`[deXer] error in ROE:`, err, selectorList, target);
-      reject(err);
-    }
-  });
+        try {
+            observer.observe(document, {subtree: true, childList: true});
+            if (timeout > 0) {
+                delay(timeout).then(() => {
+                    observer.disconnect();
+                    reject(new Error('timeout'));
+                });
+            }
+        } catch (err) {
+            console.error(`[deXer] error in ROE:`, err, selectorList, target);
+            reject(err);
+        }
+    });
 };
