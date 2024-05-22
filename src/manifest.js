@@ -25,7 +25,7 @@ export default defineManifest({
     content_scripts:[
         {
             matches: ["*://twitter.com/*", "*://x.com/*"],
-            js: ["./src/inject.js"],
+            js: ["./src/content.js"],
             run_at: "document_start"
         }
     ],
