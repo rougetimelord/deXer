@@ -24,7 +24,7 @@ utils.runtime.storageListener(async (newTheme) => {
  */
 const titleReplace = async (_, __, target) => {
   if (target.innerText.match(/X$/)) {
-    target.replaceText(/X$/, "Twitter");
+    target.replaceText(/X$|(?=on )X/, "Twitter");
     console.debug("[deXer] changed title");
   }
 };
