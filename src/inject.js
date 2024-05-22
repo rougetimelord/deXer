@@ -135,37 +135,27 @@ const toolTip = async () => {
  */
 const locationHandler = async (event) => {
   const state =
-    event.state != undefined
-      ? event.state
-      : event.detail != undefined
-        ? event.detail.state
-        : undefined;
+    (event?.detail?.state || event?.state)?.state;
   let location = window.location.pathname;
   if (
-    state !== undefined &&
-    "state" in state &&
-    (state.state.previousPath == "/i/communitynotes" ||
-      state.state.previousPath.match("/i/birdwatch"))
+    state?.previousPath.match("/i/communitynotes") ||
+    state?.previousPath.match("/i/birdwatch")
   ) {
     Promise.all([sidebarMods(), sidebarButton()]).then(() =>
       console.debug("[deXer] Left community notes, sidebar rerun"),
     );
   }
 
-  for (
-    let tries = 0;
+  for (let tries = 0;
     tries < 10 &&
-    state !== undefined &&
-    "state" in state &&
-    location == state.state.previousPath;
-    tries++
+    location == state?.previousPath; tries++
   ) {
     //This sucks!! :( don't know any better ways though
     await utils.delay(5);
     location = window.location.pathname;
   }
   try {
-    observers.forEach((obs) => obs.disconnect());
+    observers.forEach((obs) => obs?.disconnect());
   } catch {
   } finally {
     observers = [];
@@ -214,7 +204,7 @@ const locationHandler = async (event) => {
 /**
  * Main function
  */
-export const main = async () => {
+const main = async () => {
   //Add copy event listener
   utils.clipboard();
   // //Replace placeholder logo
@@ -250,3 +240,32 @@ export const main = async () => {
     utils.mutation.watchElement(e, titleReplace);
   });
 };
+
+
+(async () => {
+  /**
+   * Replaces the inner text of an HTMLElement
+   *
+   * @param {string | RegExp} searchValue The value to search for
+   * @param {string} replaceValue The value to replace with
+   */
+  HTMLElement.prototype.replaceText = function (searchValue, replaceValue) {
+    this.innerHTML = this.innerHTML.replace(searchValue, replaceValue);
+  };
+  /**
+   * Finds the deepest child of an element
+   *
+   * Only traverses first children so no guarantees that it will be the deepest child overall.
+   * @returns {HTMLElement}
+   */
+  HTMLElement.prototype.deepestChild = function () {
+    let e = this;
+    for (
+      ;
+      e.hasChildNodes() && e.firstChild instanceof HTMLElement;
+      e = e.firstChild
+    ) {}
+    return e;
+  };
+  main();
+})()

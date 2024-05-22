@@ -1,4 +1,5 @@
 //Detect chrome
+/** @type {chrome} */
 const browserRuntime = !!chrome ? chrome : browser;
 
 /**

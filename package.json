@@ -1,0 +1,22 @@
+{
+  "name": "dexer",
+  "version": "1.0.0",
+  "description": "Removes the annoying X branding from Twitter",
+  "main": "loader.js",
+  "scripts": {
+    "build": "vite build",
+    "fmt": "prettier --write **/*.{js,css,html}"
+  },
+  "browser": {
+    "[module-name]": false
+  },
+  "keywords": [],
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE",
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
+    "@types/chrome": "^0.0.259",
+    "prettier": "^3.2.4",
+    "vite": "^2.9.16"
+  }
+}
