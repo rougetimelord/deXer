@@ -1,6 +1,6 @@
 {
   "name": "dexer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Removes the annoying X branding from Twitter",
   "main": "loader.js",
   "scripts": {
@@ -13,10 +13,11 @@
   "keywords": [],
   "author": "",
   "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
   "devDependencies": {
-    "@crxjs/vite-plugin": "^1.0.14",
+    "@crxjs/vite-plugin": "^2.0.0-beta.26",
     "@types/chrome": "^0.0.259",
     "prettier": "^3.2.4",
-    "vite": "^2.9.16"
+    "vite": "^3.2.11"
   }
 }
