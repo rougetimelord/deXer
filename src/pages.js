@@ -82,6 +82,13 @@ export const timeline = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const profile = async () => {
+    utils.mutation.resolveOnElement('div[aria-label="Home timeline"] h2+div').then(es => 
+        {
+            es[0].replaceText(/post/, 'tweet');
+            console.debug('[deXer] header text updated')
+        }
+    );
+
     return utils.mutation.waitForElement(
         `a[href='/${
             window.location.pathname.split('/')[1]
