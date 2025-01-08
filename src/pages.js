@@ -41,8 +41,7 @@ export const notifications = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const timeline = async () => {
-    let orig,
-        showPosts = await utils.mutation.waitForElement(
+    let showPosts = await utils.mutation.waitForElement(
             "div[aria-label='Timeline: Your Home Timeline']>div>div:nth-child(1) span",
             async es => {
                 if (!es[0].classList.contains('dxd')) {
@@ -52,7 +51,14 @@ export const timeline = async () => {
                 }
             },
             {once: false, target: document},
-        );
+        ),
+        tweetBubble = await utils.mutation.waitForElement("div[data-testid='pillLabel']>span>span>span", async es => {
+            if (!es[0].classList.contains('dxd')) {
+                es[0].replaceText(/post/i, 'tweet');
+                es[0].classList.add('dxd');
+                console.debug('[deXer] Changed new tweets popup');
+            }
+        }, {once:false, target: document});
     return utils.mutation
         .waitForElement(
             "span[data-testid='socialContext']",
@@ -68,9 +74,10 @@ export const timeline = async () => {
             {once: false},
         )
         .then(obs => {
-            orig = obs.disconnect;
+            const orig = obs.disconnect;
             obs.disconnect = () => {
                 showPosts.disconnect();
+                tweetBubble.disconnect()
                 orig();
             };
             return obs;
