@@ -81,7 +81,7 @@ const sidebarMods = async () => {
                     "a[href~='/i/verified-orgs-signup'"
                 ).then(e => {
                     e[0].parentElement.removeChild(e[0]);
-                    console.debug('[deXer] Premium orgs removed;')
+                    console.debug('[deXer] Premium orgs removed')
                 });
                 utils.mutation.resolveOnElement(
                     "a[href~='/i/premium_sign_up'"
@@ -206,8 +206,12 @@ const locationHandler = async event => {
         });
         if (location.match(/\/home/)) {
             utils.mutation
-                .resolveOnElement("div[data-testid='tweetButtonInline']")
-                .then(es => es[0].replaceText('Post', 'Tweet'));
+                .resolveOnElement("button[data-testid='tweetButtonInline']")
+                .then(es => es[0].deepestChild().replaceText('Post', 'Tweet'));
+            utils.mutation.waitForElement("button[aria-label='Generate image']", (e) =>
+                e.forEach(v => v.parentElement.parentElement.removeChild(v.parentElement)),
+                {once: false}
+            )
         }
         return;
     }

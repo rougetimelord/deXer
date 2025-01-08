@@ -43,7 +43,7 @@ export const notifications = async () => {
 export const timeline = async () => {
     let orig,
         showPosts = await utils.mutation.waitForElement(
-            "div[role='button']>div>div:nth-child(1)>span",
+            "div[aria-label='Timeline: Your Home Timeline']>div>div:nth-child(1) span",
             async es => {
                 if (!es[0].classList.contains('dxd')) {
                     es[0].replaceText(/post/i, 'tweet');
