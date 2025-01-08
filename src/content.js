@@ -70,15 +70,27 @@ const sidebarMods = async () => {
             console.debug('[deXer] logos replaced');
         })
         .then(() =>
-            utils.mutation.resolveOnElement(
-                "a[href~='/i/grok'], a[href~='/i/verified-choose']",
-            ),
+            {
+                utils.mutation.resolveOnElement(
+                "a[href~='/i/grok']"
+                ).then(e => {
+                    e[0].parentElement.removeChild(e[0]);
+                    console.debug('[deXer] Grok removed');
+                });
+                utils.mutation.resolveOnElement(
+                    "a[href~='/i/verified-orgs-signup'"
+                ).then(e => {
+                    e[0].parentElement.removeChild(e[0]);
+                    console.debug('[deXer] Premium orgs removed;')
+                });
+                utils.mutation.resolveOnElement(
+                    "a[href~='/i/premium_sign_up'"
+                ).then(e => {
+                    e[0].parentElement.removeChild(e[0]);
+                    console.debug('[deXer] Premium removed')
+                });
+            }
         )
-        .then(es => {
-            es[0].parentElement.removeChild(es[0]);
-            es[1].parentElement.removeChild(es[1]);
-            console.debug('[deXer] Grok and premeium removed');
-        })
         .catch(err => console.error(`[deXer] error in sidebarMods`, err));
 };
 

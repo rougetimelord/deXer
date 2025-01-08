@@ -3,7 +3,7 @@ import {defineManifest} from '@crxjs/vite-plugin';
 export default defineManifest({
     name: 'deXer',
     description: '__MSG_extensionDescription__',
-    version: '0.13.0',
+    version: '0.14.0',
     author: 'r0uge',
     manifest_version: 3,
     default_locale: 'en',
