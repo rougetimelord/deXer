@@ -69,15 +69,23 @@ const sidebarMods = async () => {
             es[0].innerHTML = utils.logos[theme];
             console.debug('[deXer] logos replaced');
         })
-        .then(() =>
-            utils.mutation.resolveOnElement(
-                "a[href~='/i/grok'], a[href~='/i/verified-choose']",
-            ),
-        )
-        .then(es => {
-            es[0].parentElement.removeChild(es[0]);
-            es[1].parentElement.removeChild(es[1]);
-            console.debug('[deXer] Grok and premeium removed');
+        .then(() => {
+            utils.mutation.resolveOnElement("a[href~='/i/grok']").then(e => {
+                e[0].parentElement.removeChild(e[0]);
+                console.debug('[deXer] Grok removed');
+            });
+            utils.mutation
+                .resolveOnElement("a[href~='/i/verified-orgs-signup'")
+                .then(e => {
+                    e[0].parentElement.removeChild(e[0]);
+                    console.debug('[deXer] Premium orgs removed');
+                });
+            utils.mutation
+                .resolveOnElement("a[href~='/i/premium_sign_up'")
+                .then(e => {
+                    e[0].parentElement.removeChild(e[0]);
+                    console.debug('[deXer] Premium removed');
+                });
         })
         .catch(err => console.error(`[deXer] error in sidebarMods`, err));
 };
@@ -194,8 +202,13 @@ const locationHandler = async event => {
         });
         if (location.match(/\/home/)) {
             utils.mutation
-                .resolveOnElement("div[data-testid='tweetButtonInline']")
-                .then(es => es[0].replaceText('Post', 'Tweet'));
+                .resolveOnElement("button[data-testid='tweetButtonInline']")
+                .then(es => es[0].deepestChild().replaceText('Post', 'Tweet'));
+            utils.mutation
+                .resolveOnElement("button[data-testid='grokImgGen']")
+                .then(es => {
+                    es[0].remove();
+                });
         }
         return;
     }
