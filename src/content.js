@@ -204,16 +204,11 @@ const locationHandler = async event => {
             utils.mutation
                 .resolveOnElement("button[data-testid='tweetButtonInline']")
                 .then(es => es[0].deepestChild().replaceText('Post', 'Tweet'));
-            utils.mutation.waitForElement(
-                "button[aria-label='Generate image']",
-                e =>
-                    e.forEach(v =>
-                        v.parentElement.parentElement.removeChild(
-                            v.parentElement,
-                        ),
-                    ),
-                {once: false},
-            );
+            utils.mutation
+                .resolveOnElement("button[data-testid='grokImgGen']")
+                .then(es => {
+                    es[0].remove();
+                });
         }
         return;
     }
