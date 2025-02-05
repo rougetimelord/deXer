@@ -41,7 +41,7 @@ export const notifications = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const timeline = async () => {
-    let showPosts = await utils.mutation.waitForElement(
+    const showPosts = await utils.mutation.waitForElement(
             "div[aria-label='Timeline: Your Home Timeline']>div>div:nth-child(1) span",
             async es => {
                 if (!es[0].classList.contains('dxd')) {
@@ -52,13 +52,27 @@ export const timeline = async () => {
             },
             {once: false, target: document},
         ),
-        tweetBubble = await utils.mutation.waitForElement("div[data-testid='pillLabel']>span>span>span", async es => {
-            if (!es[0].classList.contains('dxd')) {
-                es[0].replaceText(/post/i, 'tweet');
-                es[0].classList.add('dxd');
-                console.debug('[deXer] Changed new tweets popup');
-            }
-        }, {once:false, target: document});
+        tweetBubble = await utils.mutation.waitForElement(
+            "div[data-testid='pillLabel']>span>span>span",
+            async es => {
+                if (!es[0].classList.contains('dxd')) {
+                    es[0].replaceText(/post/i, 'tweet');
+                    es[0].classList.add('dxd');
+                    console.debug('[deXer] Changed new tweets popup');
+                }
+            },
+            {once: false, target: document},
+        ),
+        grokButton = await utils.mutation.waitForElement(
+            'button[aria-label="Grok actions"]',
+            async es => {
+                es.forEach(async element => {
+                    element.remove();
+                    console.debug('[deXer] Removed grok button');
+                });
+            },
+            {once: false, target: document},
+        );
     return utils.mutation
         .waitForElement(
             "span[data-testid='socialContext']",
@@ -77,7 +91,7 @@ export const timeline = async () => {
             const orig = obs.disconnect;
             obs.disconnect = () => {
                 showPosts.disconnect();
-                tweetBubble.disconnect()
+                tweetBubble.disconnect();
                 orig();
             };
             return obs;
@@ -89,12 +103,12 @@ export const timeline = async () => {
  * @returns {Promise<MutationObserver>}
  */
 export const profile = async () => {
-    utils.mutation.resolveOnElement('div[aria-label="Home timeline"] h2+div').then(es => 
-        {
+    utils.mutation
+        .resolveOnElement('div[aria-label="Home timeline"] h2+div')
+        .then(es => {
             es[0].replaceText(/post/, 'tweet');
-            console.debug('[deXer] header text updated')
-        }
-    );
+            console.debug('[deXer] header text updated');
+        });
 
     return utils.mutation.waitForElement(
         `a[href='/${

@@ -69,28 +69,24 @@ const sidebarMods = async () => {
             es[0].innerHTML = utils.logos[theme];
             console.debug('[deXer] logos replaced');
         })
-        .then(() =>
-            {
-                utils.mutation.resolveOnElement(
-                "a[href~='/i/grok']"
-                ).then(e => {
+        .then(() => {
+            utils.mutation.resolveOnElement("a[href~='/i/grok']").then(e => {
+                e[0].parentElement.removeChild(e[0]);
+                console.debug('[deXer] Grok removed');
+            });
+            utils.mutation
+                .resolveOnElement("a[href~='/i/verified-orgs-signup'")
+                .then(e => {
                     e[0].parentElement.removeChild(e[0]);
-                    console.debug('[deXer] Grok removed');
+                    console.debug('[deXer] Premium orgs removed');
                 });
-                utils.mutation.resolveOnElement(
-                    "a[href~='/i/verified-orgs-signup'"
-                ).then(e => {
+            utils.mutation
+                .resolveOnElement("a[href~='/i/premium_sign_up'")
+                .then(e => {
                     e[0].parentElement.removeChild(e[0]);
-                    console.debug('[deXer] Premium orgs removed')
+                    console.debug('[deXer] Premium removed');
                 });
-                utils.mutation.resolveOnElement(
-                    "a[href~='/i/premium_sign_up'"
-                ).then(e => {
-                    e[0].parentElement.removeChild(e[0]);
-                    console.debug('[deXer] Premium removed')
-                });
-            }
-        )
+        })
         .catch(err => console.error(`[deXer] error in sidebarMods`, err));
 };
 
@@ -208,10 +204,16 @@ const locationHandler = async event => {
             utils.mutation
                 .resolveOnElement("button[data-testid='tweetButtonInline']")
                 .then(es => es[0].deepestChild().replaceText('Post', 'Tweet'));
-            utils.mutation.waitForElement("button[aria-label='Generate image']", (e) =>
-                e.forEach(v => v.parentElement.parentElement.removeChild(v.parentElement)),
-                {once: false}
-            )
+            utils.mutation.waitForElement(
+                "button[aria-label='Generate image']",
+                e =>
+                    e.forEach(v =>
+                        v.parentElement.parentElement.removeChild(
+                            v.parentElement,
+                        ),
+                    ),
+                {once: false},
+            );
         }
         return;
     }
